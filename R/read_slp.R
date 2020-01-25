@@ -4,7 +4,7 @@
 #' This file contains slope information assumed to be in nondimensional distances.
 #'
 #' @param file A path to the file.
-#' @return A \code{data.frame} with attributes version control number,
+#' @return A \code{slp} \code{data.frame} with attributes version control number,
 #'   aspect of the profile (degrees from North) (azm), and
 #'   representative profile width(m) fwidth, and the
 #'   following columns:

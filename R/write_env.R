@@ -1,10 +1,10 @@
 #' Write a WEPP environment file
 #'
 #' Writes a Water Erosion Prediction Project (WEPP) environment (*.env) file.
-#' This file contains environment information.
 #'
 #' @param env A \code{env} object.
 #' @param path Path to write to.
+#' @export
 #'
 write_env <- function(env, path) {
   write(" EVENT OUTPUT - Written by WEPPR (units are harded-coded and therefore may not be correct)",
