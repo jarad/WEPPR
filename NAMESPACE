@@ -3,6 +3,7 @@
 export(read_env)
 export(read_slp)
 export(read_sol)
+export(read_wb)
 export(write_env)
 export(write_slp)
 export(write_sol)
