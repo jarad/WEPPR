@@ -3,11 +3,32 @@
 \name{read_cli}
 \alias{read_cli}
 \title{Read a WEPP climate file}
+\source{
+<https://www.ars.usda.gov/ARSUserFiles/50201000/WEPP/usersum.pdf>
+}
 \usage{
 read_cli(file)
 }
 \arguments{
 \item{file}{A path to the file.}
+}
+\value{
+A \code{data.frame} containing the following columns:
+\describe{
+  \item{da}{numeric, day of the month}
+  \item{mo}{numeric, month}
+  \item{year}{numeric, year}
+  \item{prcp}{numeric, daily precipitation amount (mm)}
+  \item{dur}{numeric, duration of precipitation (hr)}
+  \item{tp}{numeric, ratio of time to rainfall peak/rainfall duration}
+  \item{ip}{numeric, ratio of maximum rainfall intensity/average rainfall intensity}
+  \item{tmax}{numeric, daily temperature maximum (degrees C)}
+  \item{tmin}{numeric, daily temperature minimum (degrees C)}
+  \item{rad}{numeric, daily solar radiation (landleys/day)}
+  \item{w-vl}{numeric, wind velocity (m/sec)}
+  \item{w-dir}{numeric, wind direction (degrees from North)}
+  \item{tdew}{numeric, dew point temperature (degrees C)}
+}
 }
 \description{
 Reads a Water Erosion Prediction Project (WEPP) climate (*.cli) file.

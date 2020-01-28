@@ -10,6 +10,6 @@ read_man(file)
 \item{file}{A path to the file.}
 }
 \description{
-Reads a Water Erosion Prediction Project (WEPP) management (*.man) file.
-This file contains land management information.
+Reads a Water Erosion Prediction Project (WEPP) plant/management (*.man) file.
+This file contains plant/management information.
 }

@@ -9,7 +9,26 @@ read_env(file)
 \arguments{
 \item{file}{A path to the file.}
 }
+\value{
+A \code{env} \code{data.frame} with the following columns:
+\describe{
+  \item{day}{Numeric, day of the month}
+  \item{mo}{Numeric, day of the month}
+  \item{year}{Numeric, day of the month}
+  \item{Precp}{Numeric, day of the month}
+  \item{Runoff}{Numeric, day of the month}
+  \item{IR-det}{Numeric, day of the month}
+  \item{Av-det}{Numeric, day of the month}
+  \item{Mx-det}{Numeric, day of the month}
+  \item{Point}{Numeric, day of the month}
+  \item{Av-dep}{Numeric, day of the month}
+  \item{Max-dep}{Numeric, day of the month}
+  \item{Point}{Numeric, day of the month}
+  \item{Sed.Del}{Numeric, sediment delivery ratio?}
+  \item{ER}{Numeric, enrichment ratio?}
+}
+}
 \description{
 Reads a Water Erosion Prediction Project (WEPP) environment (*.env) file.
-This file contains output from a WEPP run
+This file contains environmental output from
 }
