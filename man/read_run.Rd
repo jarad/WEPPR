@@ -9,7 +9,18 @@ read_run(file)
 \arguments{
 \item{file}{A path to the file.}
 }
+\value{
+A list with the following named elements:
+\describe{
+  \item{wb_file}{character, filename for wb output file}
+  \item{env_file}{character, filename for env output file}
+  \item{yld_file}{character, filename for yld output file}
+  \item{man_file}{character, filename for management input file}
+  \item{slp_file}{character, filename for slope input file}
+  \item{sol_file}{character, filename for soil input file}
+}
+}
 \description{
 Reads a Water Erosion Prediction Project (WEPP) run (*.run) file.
-This file contains run settings (?) information.
+This file contains run settings information.
 }
