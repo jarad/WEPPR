@@ -1,0 +1,29 @@
+﻿name,question
+units,Do you wish to output [e]nglish or [m]etric units for the average annual summary output file?
+drop_out,Do you wish to drop out of the model upon invalid input and write over identical output file names?
+event_option,"Continuous or single event option:  1 - continuous simulation, 2 - single storm"
+model_version_option,"Model version option: 1 - hillslope version (single hillslope only), 2 - hillslope/watershed version (multiple hillslopes, channels, and impoundments), 3 - watershed version (channels and impoundments) "
+output_hillslope_pass,Do you want hillslope pass file output (Y/N)?
+output_soil_loss_option,"Soil loss output options for continuous simulation:  [1] - Abbreviated annual, 2  - Detailed annual,  3  - Abbreviated event by event, 4  - Detailed event by event, 5  - Monthly"
+output_initial_condition_scenario,Do you want initial condition scenario output (Y/N)? 
+output_soil_loss_file,Enter file name for soil loss output -->
+output_water_balance,Do you want water balance output (Y/N)?
+output_water_balance_file,Enter file name for water balance output -->
+output_crop,Do you want crop output (Y/N)?
+output_soil,Do you want soil output (Y/N)? 
+output_distance_and_sediment_loss,Do you want distance and sediment loss output (Y/N)? 
+output_large_graphics,Do you want large graphics output (Y/N)? 
+output_event_by_event,Do you want event by event output (Y/N)?
+output_event_by_event_file,Enter file name for event by event summary -->   
+output_element,Do you want element output (Y/N)?
+output_final_summry,Do you want final summary output (Y/N)?
+output_daily_winter,Do you want daily winter output (Y/N)?
+output_yield,Do you want plant yield output (Y/N)?
+output_yield_file,Enter file name for plant yield outputs --> 
+input_management_fil,Enter name of file containing management data --> 
+input_slope_file,Enter name of file containing slope data -->  
+input_storm_file,Enter name of file containing storm data --> 
+input_soil_file,Enter name of file containing soil data --> 
+irrigation_option,"Please enter the irrigation option:  [0] no irrigation; 1  sprinkler, fixed date; 2  sprinkler, depletion level; 3  sprinkler, combination; 4  furrow,    fixed date; 5  furrow,    depletion; 6  furrow,    combination"
+n_years,Enter number of years to simulate --> 
+bypass_option,"To bypass erosion calculations for very small events, enter 1. Otherwise, to route all events enter 0   (Small events have runoff less than 10 mm and peak runoff less than 10 mm/hr)."
