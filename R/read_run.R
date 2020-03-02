@@ -18,36 +18,19 @@
 read_run <- function(file) {
   warning("This function is not yet implemented.")
 
-  d = readLines(file)
+  run <- run_variables
+  run$value <- read.csv(file,
+                        header = FALSE,
+                        stringsAsFactors = FALSE,
+                        col.names = "value")
 
-  list(
-    V1 = d[1],
-    V2 = d[2],
-    V3 = d[3],
-    V4 = d[4],
-    V5 = d[5],
-    V6 = d[6],
-    V7 = d[7],
-    V8 = d[8],
-    V9 = d[9],
-    wb_file = d[10],
-    V11 = d[11],
-    V12 = d[12],
-    V13 = d[13],
-    V14 = d[14],
-    V15 = d[15],
-    env_file = d[16],
-    V17 = d[17],
-    V18 = d[18],
-    V19 = d[19],
-    V20 = d[20],
-    yld_file = d[21],
-    man_file = d[22],
-    slp_file = d[23],
-    V21 = d[21],
-    sol_file = d[25],
-    V26 = d[26],
-    V27 = d[27],
-    V28 = d[28]
-  )
+  return(run[,c("name","value","question")])
 }
+
+
+#' Run option variables
+#'
+#' Contains all possible run option variables with the associated question
+#' that is asked.
+#'
+"run_variables"
