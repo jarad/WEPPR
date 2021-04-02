@@ -26,11 +26,14 @@
 read_env <- function(file) {
   headers = read.table(file, skip = 1, header = F, nrows = 1, as.is = TRUE)
 
+  units = read.table(file, skip = 1, header = TRUE, nrows = 1, as.is = TRUE)
+
   env = read.table(file,
            skip = 3,
            header = FALSE)
 
   colnames(env) = headers
+  attr(env, 'units') = units
 
   class(env) <- append(class(env), "env")
   return(env)
