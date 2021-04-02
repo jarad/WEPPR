@@ -7,15 +7,14 @@
 #' @export
 #'
 write_env <- function(env, path) {
-  write(" EVENT OUTPUT - Written by WEPPR (units are harded-coded and therefore may not be correct)",
+  write(" EVENT OUTPUT - Written by WEPPR",
         file = path)
 
   write(paste(colnames(env), collapse = " "),
         file = path,
         append = TRUE)
 
-  warning("Units (3rd line) are hard-coded and therefore might not be correct.")
-  write("--- --  ----  (mm)    (mm)  kg/m^2 kg/m^2 kg/m^2    (m)  kg/m^2  kg/m^2    (m)  (kg/m)  ----",
+  write(paste(attr(env, 'units'), collapse = " "),
         file = path,
         append = TRUE)
 
