@@ -66,8 +66,7 @@ read_yld <- function(file) {
       # colnames
       colnames = tolower(c(paste(tmp[2], tmp[3], sep='_'),
                            tmp[7], tmp[10],
-                           substr(tmp[14], 1, 5),
-                           substr(tmp[20], 1, 4)))
+                           substr(tmp[14], 1, 5)))
 
       count = count + 1
     } else {
@@ -79,7 +78,10 @@ read_yld <- function(file) {
   crops = data.frame(crops, row.names = NULL)
   colnames(crops) = c('id', 'name')
 
-  yields = data.frame(crop_type, date, OFE, yield, year)
+  # make a new date column out of date and year columns
+  date = as.Date(paste(year, 01, 01, sep = '-' )) + date
+
+  yields = data.frame(crop_type, date, OFE, yield)
   colnames(yields) = colnames
 
   return(list(crops, yields))
