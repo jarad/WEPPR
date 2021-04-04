@@ -4,6 +4,19 @@
 #' This file contains yield information.
 #'
 #' @param file A path to the file.
+#' @return A \code{list} with two \code{data.frames} crops and yields.
+#'   Crops \code{data.frame} contains two columns:
+#'   \describe{
+#'     \item{id}{id of the crop}
+#'     \item{name}{name of the crop}
+#'   }
+#'   Yields \code{data.frame} contains four columns:
+#'   \describe{
+#'     \item{crop_type}{id of the crop}
+#'     \item{date}{cutting date of the yield}
+#'     \item{ofe}{Overland Flow Elements}
+#'     \item{yield}{yield in kg/m^2 collected on a cutting date}
+#'   }
 #' @export
 #'
 read_yld <- function(file) {
@@ -14,7 +27,6 @@ read_yld <- function(file) {
   date = c()
   OFE = c()
   yield = c()
-  unit = c()
   year = c()
 
   blank_line = 0
@@ -49,8 +61,13 @@ read_yld <- function(file) {
       date[count] = as.numeric(tmp[9])
       OFE[count] = as.numeric(tmp[13])
       yield[count] = as.numeric(tmp[18])
-      unit[count] = tmp[19]
       year[count] = as.numeric(tmp[21])
+
+      # colnames
+      colnames = tolower(c(paste(tmp[2], tmp[3], sep='_'),
+                           tmp[7], tmp[10],
+                           substr(tmp[14], 1, 5),
+                           substr(tmp[20], 1, 4)))
 
       count = count + 1
     } else {
@@ -62,7 +79,8 @@ read_yld <- function(file) {
   crops = data.frame(crops, row.names = NULL)
   colnames(crops) = c('id', 'name')
 
-  yields = data.frame(crop_type, date, OFE, yield, unit, year)
+  yields = data.frame(crop_type, date, OFE, yield, year)
+  colnames(yields) = colnames
 
   return(list(crops, yields))
 }
