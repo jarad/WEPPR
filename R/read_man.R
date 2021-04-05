@@ -3,9 +3,11 @@
 #' Reads a Water Erosion Prediction Project (WEPP) plant/management (*.man) file.
 #' This file contains plant/management information.
 #'
+#' This function uses reticulate package, which is compatible with all versions
+#' of Python >= 2.7. Integration with NumPy is optional and requires NumPy >= 1.6.
+#'
 #' @param file A path to the file.
-#' @return A \code{man} \code{list} with management set-up
-#' !!! needs more comments here !!!
+#' @return A \code{man} \code{list} with management set-up and
 #'   following elements:
 #'   \describe{
 #'     \item{manver}{}
@@ -34,11 +36,10 @@
 #' @export
 #'
 read_man <- function(file) {
-  require("reticulate")
 
-  py_function = py_run_file("./R/read_man.py", local = TRUE)$read_man
+  py_function = reticulate::py_run_file("./R/read_man.py", local = TRUE)$read_man
 
-  res = py_function(file)
+  res = reticulate::py_function(file)
 
   return(res)
 }
