@@ -176,7 +176,7 @@ extract_breakpoints <- function(precip_with_breakpoints) {
 
   breakpoints <- cbind(precip[rep.int(1:nrow(precip), precip$nbrkpt),
                               c("da","mo","year")],
-                       breakpoints)
+                       breakpoints, row.names=NULL)
 
   return(list(precip      = precip,
               breakpoints = breakpoints))
