@@ -84,5 +84,6 @@ read_yld <- function(file) {
   yields = data.frame(crop_type, date, OFE, yield)
   colnames(yields) = colnames
 
-  return(list(crops, yields))
+  return(list(crop =crops,
+              yield = yields))
 }
