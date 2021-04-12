@@ -168,6 +168,7 @@ read_cli_raw <- function(file) {
 extract_breakpoints <- function(precip_with_breakpoints) {
 
   precip = na.omit(precip_with_breakpoints)
+  precip$date = as.Date(paste(precip$year, precip$mo, precip$da, sep = '-'))
 
   # extract the rows containing NAs
   breakpoints <- precip_with_breakpoints[is.na(rowSums(precip_with_breakpoints)),1:2]
@@ -178,8 +179,12 @@ extract_breakpoints <- function(precip_with_breakpoints) {
                               c("da","mo","year")],
                        breakpoints, row.names=NULL)
 
-  return(list(precip      = precip,
-              breakpoints = breakpoints))
+  breakpoints$date = as.Date(paste(breakpoints$year,
+                                   breakpoints$mo,
+                                   breakpoints$da, sep = '-'))
+
+  return(list(precip      = precip[, -c(1:3)],
+              breakpoints = breakpoints[, -c(1:3)]))
 }
 
 

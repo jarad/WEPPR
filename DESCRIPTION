@@ -1,6 +1,6 @@
 Package: WEPPR
 Title: Runs WEPP and emulators
-Version: 0.0.0.9008
+Version: 0.0.0.9009
 Authors@R: 
     person(given = "Jarad",
            family = "Niemi",
