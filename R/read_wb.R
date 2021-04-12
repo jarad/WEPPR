@@ -21,5 +21,10 @@
 #' @export
 #'
 read_wb <- function(file) {
-  read.table(file, header = TRUE)
+  res = read.table(file, header = TRUE)
+
+  # make a new date column out of date and year columns
+  res$date = as.Date(paste(res$year, 01, 01, sep = '-' )) + res$jday - 1
+
+  return(res[,-c(2:3)])
 }
