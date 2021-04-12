@@ -79,7 +79,7 @@ read_yld <- function(file) {
   colnames(crops) = c('id', 'name')
 
   # make a new date column out of date and year columns
-  date = as.Date(paste(year, 01, 01, sep = '-' )) + date
+  date = as.Date(paste(year, 01, 01, sep = '-' )) + date - 1
 
   yields = data.frame(crop_type, date, OFE, yield)
   colnames(yields) = colnames
