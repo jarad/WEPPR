@@ -4,6 +4,7 @@
 #' This file contains environmental output from
 #'
 #' @param file A path to the file.
+#' @param start.year First year of simulation.
 #' @return A \code{env} \code{data.frame} with the following columns:
 #' \describe{
 #'   \item{day}{Numeric, day of the month}
@@ -23,7 +24,7 @@
 #' }
 #' @export
 #'
-read_env <- function(file) {
+read_env <- function(file, start.year) {
   headers = read.table(file, skip = 1, header = F, nrows = 1, as.is = TRUE)
 
   units = read.table(file, skip = 1, header = TRUE, nrows = 1, as.is = TRUE)
@@ -35,6 +36,8 @@ read_env <- function(file) {
   colnames(env) = headers
   attr(env, 'units') = units
 
+  env$Date = as.Date(paste(start.year+env$year-1, env$mo, env$da, sep = '-'))
+
   class(env) <- append(class(env), "env")
-  return(env)
+  return(env[, -c(1:3)])
 }
