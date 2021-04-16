@@ -2,16 +2,16 @@ Package: WEPPR
 Title: Runs WEPP and emulators
 Version: 0.0.0.9013
 Authors@R: 
-    person(given = "Jarad",
+    c(person(given = "Jarad",
            family = "Niemi",
            role = c("aut", "cre"),
            email = "niemi@iastate.edu",
            comment = c(ORCID = "0000-0002-5079-158X")),
     person(given = "Gulzina",
            family = "Kuttubekova",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "gkuttube@ucsc.edu",
-           comment = c(ORCID = "0000-0003-3765-108X"))
+           comment = c(ORCID = "0000-0003-3765-108X")))
 Description: The Water Erosion Prediction Project (WEPP) computer model
     simulates water erosion events and estimates runoff, soil detachment, and
     soil loss. This package can run WEPP and emulators for WEPP. 
@@ -21,6 +21,6 @@ LazyData: true
 RoxygenNote: 7.1.1
 Suggests: 
     testthat (>= 2.1.0),
-    reticulate (>=1.18)
+    reticulate (>= 1.18)
 Depends:
     R (>= 4.0)
