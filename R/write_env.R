@@ -14,6 +14,14 @@
 #' @export
 #'
 write_env <- function(env, path) {
+  # decompose Dates column
+  day = as.numeric(format(as.Date(env$Date,format="%Y-%m-%d"), format = "%d"))
+  mo = as.numeric(format(as.Date(env$Date,format="%Y-%m-%d"), format = "%m"))
+  year = as.numeric(format(as.Date(env$Date,format="%Y-%m-%d"), format = "%Y"))
+  year = year - min(year) + 1
+
+  env = cbind(day, mo, year, env[,!(names(env) == 'Date')])
+
   write(" EVENT OUTPUT - Written by WEPPR",
         file = path)
 
