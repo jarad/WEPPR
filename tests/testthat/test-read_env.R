@@ -1,3 +1,5 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+env_file <- system.file("extdata", "071000090603_2.env", package="WEPPR")
+
+test_that("no error", {
+  expect_error(read_env(env_file), NA)
 })

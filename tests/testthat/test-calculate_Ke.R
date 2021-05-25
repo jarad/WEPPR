@@ -18,10 +18,3 @@ d <- expand.grid(hydrologic_group = c("A","B","C","D"),
          Ke = Kef # management == Fallow
          )
 
-
-
-
-
-test_that("Kef calculation is correct", {
-
-})
