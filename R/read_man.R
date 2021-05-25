@@ -39,9 +39,9 @@ read_man <- function(file) {
   if(!require(reticulate))
     stop("You must install the 'reticulate' package.")
 
-  py_function = reticulate::py_run_file("./R/read_man.py", local = TRUE)$read_man
+  py_function <- reticulate::py_run_file("./R/read_man.py", local = TRUE)$read_man
 
-  res = reticulate::py_function(file)
+  res <- reticulate::py_function(file)
 
   return(res)
 }

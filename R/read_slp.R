@@ -18,39 +18,42 @@
 #'
 read_slp <- function(file) {
 
-  d = readLines(file)
+  d <- readLines(file)
 
-  version = d[1]
+  version <- d[1]
 
-  i = 2
+  i <- 2 # line number
   while (substr(d[i], 1, 1) == "#")
-    i = i+1
-  nelem = as.numeric(d[i]) # number of overland flow elements (OFEs)
+    i <- i + 1
 
-  i = i+1
-  tmp = as.numeric(strsplit(d[i], split = " ")[[1]])
-  azm    = tmp[1] # aspect of the profile (degrees from North)
-  fwidth = tmp[2] # representative profile width (m)
+  nelem <- as.numeric(d[i]) # number of overland flow elements (OFEs)
 
-  OFEs = list()
+  i      <- i+1
+  tmp    <- as.numeric(strsplit(d[i], split = " ")[[1]])
+  azm    <- tmp[1] # aspect of the profile (degrees from North)
+  fwidth <- tmp[2] # representative profile width (m)
+
+  OFEs <- list()
   for (n in 1:nelem) {
-    i = i+1
-    tmp = as.numeric(strsplit(d[i], split = " ")[[1]])
-    nsplts = tmp[1] # number of splits
-    slplen = tmp[2] # length of OFE (m)
+    i      <- i + 1
+    tmp    <- as.numeric(strsplit(d[i], split = " ")[[1]])
+    nsplts <- tmp[1] # number of splits
+    slplen <- tmp[2] # length of OFE (m)
 
-    i = i+1
-    tmp = as.numeric(gsub(",","",strsplit(d[i], split = c(" ",", "))[[1]][-1]))
-    p     = tmp[seq(1,2*nsplts,by=2)]
-    slope = tmp[seq(2,2*nsplts,by=2)]
+    i     <- i+1
+    tmp   <- as.numeric(gsub(",","",strsplit(d[i], split = c(" ",", "))[[1]][-1]))
+    p     <- tmp[seq(1,2*nsplts,by=2)]
+    slope <- tmp[seq(2,2*nsplts,by=2)]
 
-    OFEs[[n]] = data.frame(n = n, p = p, slope = slope, distance = p*slplen)
+    OFEs[[n]] <- data.frame(n = n, p = p, slope = slope, distance = p*slplen)
   }
-  OFEs = do.call(rbind, OFEs)
+
+  OFEs <- do.call(rbind, OFEs)
   if (any(OFEs$p>1))
     stop("OFEs are not in nondimensional distances")
 
   class(OFEs) <- append(class(OFEs), "slp")
+
   attr(OFEs, "version") <- version
   attr(OFEs, "azm")     <- azm
   attr(OFEs, "fwidth")  <- fwidth

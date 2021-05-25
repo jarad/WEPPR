@@ -7,22 +7,22 @@
 #' @export
 #'
 read_sol <- function(file) {
-  d = readLines(file)
+  d <- readLines(file)
 
-  tmp = as.numeric(strsplit(d[3], split = " ")[[1]])
-  ntemp = tmp[1]
-  ksflag = tmp[2]
+  tmp <- as.numeric(strsplit(d[3], split = " ")[[1]])
+  ntemp <- tmp[1]
+  ksflag <- tmp[2]
 
-  OFEs = list()
-  layers = list()
-  conductivity = list()
-  i = 4
+  OFEs <- list()
+  layers <- list()
+  conductivity <- list()
+  i <- 4
   for (n in 1:ntemp) {
     # line 1 for this soil type
-    tmp = strsplit(d[i], split = " ")[[1]]
+    tmp <- strsplit(d[i], split = " ")[[1]]
 
-    nsl = as.integer(tmp[3])
-    OFEs[[n]] = data.frame(layer  = n,
+    nsl <- as.integer(tmp[3])
+    OFEs[[n]] <- data.frame(layer  = n,
                            slid   = tmp[1],
                            texid  = tmp[2],
                            # nsl    = nsl,
@@ -35,25 +35,26 @@ read_sol <- function(file) {
                            stringsAsFactors = FALSE)
 
     # following lines for this soil type
-    layers[[n]] = read.table(textConnection(d[i + c(1:nsl)]),
+    layers[[n]] <- read.table(textConnection(d[i + c(1:nsl)]),
                              col.names = c("solthk","sand","clay","orgmat","cec","rfg"))
-    layers[[n]]$layer = n
+    layers[[n]]$layer <- n
 
     # soil conductivity lines
-    conductivity[[n]] = read.table(textConnection(d[i+nsl+1]),
+    conductivity[[n]] <- read.table(textConnection(d[i+nsl+1]),
                               col.names = c("Ke","flag_Kb_Ke", "unknown"))
-    conductivity[[n]]$layer = n
+    conductivity[[n]]$layer <- n
 
-    i = i + 2 + nsl
+    i <- i + 2 + nsl
   }
-  OFEs   = do.call(rbind, OFEs)
-  layers = do.call(rbind, layers)
-  conductivity = do.call(rbind, conductivity)
+  OFEs   <- do.call(rbind, OFEs)
+  layers <- do.call(rbind, layers)
+  conductivity <- do.call(rbind, conductivity)
 
-  soil = merge(OFEs, layers, by = "layer", all = TRUE)
-  soil = merge(soil, conductivity, by = "layer", all = TRUE)
+  soil <- merge(OFEs, layers, by = "layer", all = TRUE)
+  soil <- merge(soil, conductivity, by = "layer", all = TRUE)
 
   class(soil) <- append(class(soil), "sol")
+
   attr(soil, "datver") <- d[1]
   attr(soil, "solcom") <- d[2]
   attr(soil, "ksflag") <- ksflag
