@@ -6,6 +6,18 @@
 \usage{
 run_wepp()
 }
+\arguments{
+\item{man}{A \code{man} object representing land management}
+
+\item{run}{A \code{run} object representing run settings}
+
+\item{slp}{A \code{slp} object representing slope}
+
+\item{sol}{A \code{sol} object representing sol}
+
+\item{path}{A path where files should be written. If null, files are written
+to a temporary directory and that directory is reported.}
+}
 \description{
 An R interface to run the Water Erosion Prediction Project (WEPP) model.
 }

@@ -9,6 +9,21 @@ read_yld(file)
 \arguments{
 \item{file}{A path to the file.}
 }
+\value{
+A \code{list} with two \code{data.frames} crops and yields.
+  Crops \code{data.frame} contains two columns:
+  \describe{
+    \item{id}{id of the crop}
+    \item{name}{name of the crop}
+  }
+  Yields \code{data.frame} contains four columns:
+  \describe{
+    \item{crop_type}{id of the crop}
+    \item{date}{cutting date of the yield}
+    \item{ofe}{Overland Flow Elements}
+    \item{yield}{yield in kg/m^2 collected on a cutting date}
+  }
+}
 \description{
 Reads a Water Erosion Prediction Project (WEPP) yield (*.yld) file.
 This file contains yield information.

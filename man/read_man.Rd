@@ -9,7 +9,39 @@ read_man(file)
 \arguments{
 \item{file}{A path to the file.}
 }
+\value{
+A \code{man} \code{list} with management set-up and
+  following elements:
+  \describe{
+    \item{manver}{}
+    \item{iofe}{}
+    \item{inyr}{}
+    \item{ncrop}{}
+    \item{crops}{}
+    \item{nop}{}
+    \item{operations}{}
+    \item{nini}{}
+    \item{ini}{}
+    \item{nsurf}{}
+    \item{surfeffects}{}
+    \item{ncnt}{}
+    \item{ndrain}{}
+    \item{nmscen}{}
+    \item{scens}{}
+    \item{mantitle}{}
+    \item{mandesc}{}
+    \item{nwsofe}{}
+    \item{inindx}{}
+    \item{nrots}{}
+    \item{nyears}{}
+    \item{rotations}{}
+  }
+}
 \description{
 Reads a Water Erosion Prediction Project (WEPP) plant/management (*.man) file.
 This file contains plant/management information.
+}
+\details{
+This function uses reticulate package, which is compatible with all versions
+of Python >= 2.7. Integration with NumPy is optional and requires NumPy >= 1.6.
 }
