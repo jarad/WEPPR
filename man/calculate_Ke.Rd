@@ -5,7 +5,7 @@
 \alias{calculate_Kef}
 \title{Calculate time-invariant effective hydraulic conductivity (Ke-constant)}
 \source{
-page 26 of <https://www.ars.usda.gov/ARSUserFiles/50201000/WEPP/usersum.pdf>
+page 26 of \url{https://www.ars.usda.gov/ARSUserFiles/50201000/WEPP/usersum.pdf}
 }
 \usage{
 calculate_Ke(hydrologic_group, management, sand = NULL)

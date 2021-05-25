@@ -4,7 +4,8 @@
 #' @param management management practice
 #' @param sand
 #'
-#' @source page 26 of <https://www.ars.usda.gov/ARSUserFiles/50201000/WEPP/usersum.pdf>
+#' @source
+#' page 26 of \url{https://www.ars.usda.gov/ARSUserFiles/50201000/WEPP/usersum.pdf}
 #'
 calculate_Ke <- function(hydrologic_group, management, sand = NULL) {
 
