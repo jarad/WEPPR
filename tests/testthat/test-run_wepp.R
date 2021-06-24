@@ -10,6 +10,10 @@ test_that("Correct type",{
   expect_type(d, "list")
   expect_s3_class(d, "data.frame")
 
-  expect_type(d$Input_files, "character")
-  expect_type(d$Output_files, "character")
+  expect_type(d$File_name, "character")
+  expect_type(d$File_extension, "character")
+  expect_type(d$File_type, "character")
+  expect_type(d$Type, "character")
+  expect_type(d$md5sum, "character")
+  expect_type(d$Id, "character")
 })
