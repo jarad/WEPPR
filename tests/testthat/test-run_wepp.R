@@ -1,8 +1,13 @@
+#skips the test if not on Linux OS
+skip_if_not((Sys.info()[['sysname']] == "Linux"),
+            message="Operating system is not Linux")
+
 run_file <- system.file("extdata", "071000090603_2.run", package="WEPPR")
 
 library("tools")
 
-test_that("Correct extension",{expect_equal(tools::file_ext(run_file)=="run",TRUE)})
+test_that("Correct extension",
+          {expect_equal(tools::file_ext(run_file)=="run",TRUE)})
 test_that("Correct type",{
   expect_error(d <- run_wepp(run_file), NA)
   expect_named(d, c("Input_files", "Output_files"))
