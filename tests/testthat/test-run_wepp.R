@@ -10,7 +10,8 @@ test_that("Correct extension",
           {expect_equal(tools::file_ext(run_file)=="run",TRUE)})
 test_that("Correct type",{
   expect_error(d <- run_wepp(run_file), NA)
-  expect_named(d, c("Input_files", "Output_files"))
+  expect_named(d, c("File_name", "File_extension", "File_type",
+                    "Type", "md5sum", "Id"))
 
   expect_type(d, "list")
   expect_s3_class(d, "data.frame")
