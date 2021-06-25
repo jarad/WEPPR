@@ -6,7 +6,7 @@
 \alias{extract_breakpoints}
 \title{Read a WEPP climate file}
 \source{
-<https://www.ars.usda.gov/ARSUserFiles/50201000/WEPP/usersum.pdf>
+\url{https://www.ars.usda.gov/ARSUserFiles/50201000/WEPP/usersum.pdf}
 }
 \usage{
 read_cli(file, breakpoints = NULL)
