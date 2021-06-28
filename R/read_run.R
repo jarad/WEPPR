@@ -28,6 +28,54 @@ read_run <- function(file) {
 }
 
 
+#' Create a run object
+#'
+#' Interactively create a run object by asking questions in exactly the same
+#' order as the WEPP interactive system. Ideally, you only need to go through
+#' this process once and then you can modify the run object as needed, e.g. to
+#' change file names.
+#'
+#' This run object specifies the type of WEPP simulation to perform as well as
+#' names for input/output files.
+#'
+#' @return A data frame containing two columns
+#' \describe{
+#'   \item{name}{names of variables}
+#'   \item{value}{the value for that variable}
+#' }
+#'
+#' @export
+#'
+create_run <- function() {
+  run <- data.frame(name = character(),
+                    value = character())
+
+  # questions <- merge(run_variables, wepp_run_questions,
+  #                    by = "question", all.y = TRUE, sort = FALSE)
+  questions <- wepp_run_questions
+
+  line     <- 1
+  while (line > 0) {
+    question <- questions$question[line]
+    answers <- questions$answer[questions$question == question]
+    answer <- NULL
+
+    while(!(answer %in% answers)) {
+      answer <- readline(questions$question[line])
+
+      if (answers == "text")
+        answers <- answer # hack to ensure text answers are automatically accepted
+    }
+
+    question <- questions$question
+
+    run <- cbind(run, tmp)
+  }
+
+  return(run)
+}
+
+
 #' Run option variables
 #'
 #' Contains all possible run option variables with the associated question
