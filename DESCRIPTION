@@ -1,6 +1,6 @@
 Package: WEPPR
 Title: Runs WEPP and emulators
-Version: 0.0.0.9020
+Version: 0.0.0.9021
 Authors@R: 
     c(
     person(given = "Jarad",
@@ -26,3 +26,5 @@ Suggests:
     reticulate (>= 1.18)
 Depends:
     R (>= 4.0)
+Imports: 
+    tools
