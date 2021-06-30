@@ -12,7 +12,7 @@ slp_file <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
 sol_file <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
 cli_file <- system.file("extdata", "092.63x040.90.cli", package="WEPPR")
 input_files <- c(man_file,slp_file,sol_file,cli_file)
-copy.file(c(input_files,run_file),tempdir())
+file.copy(c(input_files,run_file),tempdir())
 
 library("tools")
 
