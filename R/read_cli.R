@@ -118,10 +118,10 @@ read_cli_raw <- function(file) {
 
   # extract monthly averages
   averages <- data.frame(month = 1:12,
-                        obmaxt = scan(file, skip =  6, n = 12),
-                        obmint = scan(file, skip =  8, n = 12),
-                        radave = scan(file, skip = 10, n = 12),
-                        obrain = scan(file, skip = 12, n = 12))
+                        obmaxt = scan(file, skip =  6, n = 12, quiet = TRUE),
+                        obmint = scan(file, skip =  8, n = 12, quiet = TRUE),
+                        radave = scan(file, skip = 10, n = 12, quiet = TRUE),
+                        obrain = scan(file, skip = 12, n = 12, quiet = TRUE))
 
 
   # extract daily weather
