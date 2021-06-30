@@ -26,9 +26,5 @@ Suggests:
     reticulate (>= 1.18)
 Depends:
     R (>= 4.0)
-<<<<<<< HEAD
-Config/testthat/edition: 3
-=======
 Imports: 
     tools
->>>>>>> origin/master
