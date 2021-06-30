@@ -3,9 +3,6 @@
 #' This function will calculation the baseline effective conductivity based on
 #' the amount of sand, clay and the cation exchange capacity of the soil.
 #'
-#' @details
-#'
-#'
 #'
 #' @param sand percent of sand
 #' @param clay percent of clay
