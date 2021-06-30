@@ -4,7 +4,7 @@
 #' This file contains environmental output from
 #'
 #' @param file A path to the file.
-#' @param start.year First year of simulation.
+#' @param start.year First year of simulation. (Default is 2006 corresponding to DEP simulations.)
 #' @return A \code{env} \code{data.frame} with the following columns:
 #' \describe{
 #'   \item{day}{Numeric, day of the month}
@@ -24,7 +24,7 @@
 #' }
 #' @export
 #'
-read_env <- function(file, start.year) {
+read_env <- function(file, start.year=2006) {
   headers = read.table(file, skip = 1, header = F, nrows = 1, as.is = TRUE)
 
   units = read.table(file, skip = 1, header = TRUE, nrows = 1, as.is = TRUE)
