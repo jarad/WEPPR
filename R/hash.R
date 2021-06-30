@@ -6,11 +6,16 @@
 #' a file and then hashing the file.
 #'
 #' @param files path and names of files to calculate md5sum
+#' @param file  argument to indicate if the path is for a file or not. default value is TRUE
 #'
 #' @value md5sum of file
 #'
 #' @importFrom tools md5sum
 #'
-hash <- function(files) {
-  return(tools::md5sum(files))
+hash <- function(files, file=TRUE){
+  if(file==TRUE){
+    return(tools::md5sum(files))
+  } else {
+    return(digest::digest(files))
+  }
 }

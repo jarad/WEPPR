@@ -19,16 +19,19 @@ run_wepp <- function(file) {
   stopifnot("Please pass a file with correct extension" =
               tools::file_ext(file) == "run")
   stopifnot("Please run the function on Linux Operating System" =
-              (Sys.info()[['sysname']] == "Linux"))
+              WEPPR::is_linux() == "TRUE"))
 
   #checks for the binary file
+  stopifnot("WEPP executable not found"= is_wepp_available() == "TRUE"))
   binary.file <- list.files(getwd(), pattern = "wepp$")
-  stopifnot("Please ensure wepp executable file is present in the working directory"= (tools::md5sum(binary.file) == "aab6591e5ae146ee61eb7cf162aef605"))
+  stopifnot(
+    "Please ensure wepp executable file is present in the working directory"=
+      (WEPPR::hash(binary.file, file=TRUE) == "aab6591e5ae146ee61eb7cf162aef605"))
 
-  runfile <- read.table(file, header = FALSE,
-                        stringsAsFactors = FALSE, col.names = "value")
-  input_files <- runfile[c(22:25),1]
-  output_files <- runfile[c(10,16,21),1]
+  runfile <- readLines(file, 28)[c(22,23,25,24,10,16,21)]
+  names(runfile) <- c("man","slp","sol","cli","wb","env","yld")
+  input_files <- runfile[c("man","slp","sol","cli")]
+  output_files <- runfile[c("wb","env","yld")]
 
   #copies the input file and binary file to working directory
   current.folder <- getwd()
@@ -40,32 +43,30 @@ run_wepp <- function(file) {
   #copies the output files to the working directory
   system(paste(command = './wepp<',file,' > screen.txt'), wait = TRUE)
   file.copy(c(output_files,"screen.txt"), current.folder)
-  files <- c(output_files, input_files,file)
+  files <- c(output_files, input_files)
 
   #create the columns for data frame to be returned
-  file.extension <- tools::file_ext(files)
-  file.type <- ifelse(file.extension %in% c("cli","man","slp","sol","run","wepp"),
-                      "input",
+  file.name <- names(files)
+  file.type <- ifelse(file.name %in% c("cli","man","slp","sol"),"input",
                       ifelse(file.extension %in% c("env","yld","wb","txt"),
-                             "output",""))
+                             "output","unknown"))
   lookup <-read.table(header = TRUE,
                       stringsAsFactors = FALSE,
                       text="extension type
-                            cli Climate
-                            env Environment
-                            man Management
-                            run Run
-                            slp Slope
-                            sol Soil
-                            wb  Water_balance
-                            yld Yield")
-  type <- with(lookup, type[match(file.extension,extension)])
-  uniquehash <- as.vector(tools::md5sum(files))
-  id <- digest::digest(paste(uniquehash, collapse = ''),"md5")
-  run.out <- data.frame("File_name" = files,
-                        "File_extension" = file.extension,
-                        "File_type" = type,
-                        "Type" = file.type,
+                            cli climate
+                            env environment
+                            man management
+                            run run
+                            slp slope
+                            sol soil
+                            wb  waterbalance
+                            yld yield")
+  type <- with(lookup, type[match(file.name,extension)])
+  uniquehash <- as.vector(WEPPR::hash(files, file = TRUE))
+  id <- WEPPR::hash(paste(uniquehash, collapse = ''),file = FALSE)
+  run.out <- data.frame("file_name" = as.vector(files),
+                        "file_type" = type,
+                        "type" = file.type,
                         "md5sum" = uniquehash)
   run.out$Id <- id
   return(run.out)
