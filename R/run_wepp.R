@@ -48,11 +48,11 @@ run_wepp <- function(file) {
   #create the columns for data frame to be returned
   file.name <- names(files)
   file.type <- ifelse(file.name %in% c("cli","man","slp","sol"),"input",
-                      ifelse(file.extension %in% c("env","yld","wb","txt"),
+                      ifelse(file.name %in% c("env","yld","wb","txt"),
                              "output","unknown"))
   lookup <-read.table(header = TRUE,
                       stringsAsFactors = FALSE,
-                      text="extension type
+                      text="name type
                             cli climate
                             env environment
                             man management
@@ -61,7 +61,7 @@ run_wepp <- function(file) {
                             sol soil
                             wb  waterbalance
                             yld yield")
-  type <- with(lookup, type[match(file.name,extension)])
+  type <- with(lookup, type[match(file.name,name)])
   uniquehash <- as.vector(WEPPR::hash(files, file = TRUE))
   id <- WEPPR::hash(paste(uniquehash, collapse = ''),file = FALSE)
   run.out <- data.frame("file_name" = as.vector(files),
