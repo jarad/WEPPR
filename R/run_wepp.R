@@ -41,7 +41,7 @@ run_wepp <- function(file) {
 
   #runs the binary files using the input files and
   #copies the output files to the working directory
-  system(paste(command = './wepp<',file,' > screen.txt'), wait = TRUE)
+  system(paste(command = 'wepp<',file,' > screen.txt'), wait = TRUE)
   file.copy(c(output_files,"screen.txt"), current.folder)
   files <- c(output_files, input_files)
 
