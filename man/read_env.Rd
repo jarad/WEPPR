@@ -4,12 +4,12 @@
 \alias{read_env}
 \title{Read a WEPP environment file}
 \usage{
-read_env(file, start.year)
+read_env(file, start.year = 2006)
 }
 \arguments{
 \item{file}{A path to the file.}
 
-\item{start.year}{First year of simulation.}
+\item{start.year}{First year of simulation. (Default is 2006 corresponding to DEP simulations.)}
 }
 \value{
 A \code{env} \code{data.frame} with the following columns:
