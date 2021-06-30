@@ -1,6 +1,6 @@
 #' Will check for WEPP executable
 #'
-#' @value if WEPP executable is in the path, returns TRUE otherwise returns FALSE
+#' @return if WEPP executable is in the path, returns TRUE otherwise returns FALSE
 #'
 is_wepp_available <- function() {
   if (!is_linux()) {

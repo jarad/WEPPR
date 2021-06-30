@@ -26,9 +26,6 @@ numeric, Kb, the baseline effective conductivity
 This function will calculation the baseline effective conductivity based on
 the amount of sand, clay and the cation exchange capacity of the soil.
 }
-\details{
-
-}
 \section{Functions}{
 \itemize{
 \item \code{calculate_Kb}: 

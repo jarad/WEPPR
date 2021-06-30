@@ -7,7 +7,7 @@
 #'
 #' @param files path and names of files to calculate md5sum
 #'
-#' @value md5sum of file
+#' @return md5sum of file
 #'
 #' @importFrom tools md5sum
 #'
