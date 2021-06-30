@@ -19,14 +19,14 @@ run_wepp <- function(file) {
   stopifnot("Please pass a file with correct extension" =
               tools::file_ext(file) == "run")
   stopifnot("Please run the function on Linux Operating System" =
-              WEPPR::is_linux() == "TRUE"))
+              WEPPR::is_linux() == "TRUE")
 
   #checks for the binary file
-  stopifnot("WEPP executable not found"= is_wepp_available() == "TRUE"))
+  stopifnot("WEPP executable not found"= is_wepp_available() == "TRUE")
   binary.file <- list.files(getwd(), pattern = "wepp$")
   stopifnot(
     "Please ensure wepp executable file is present in the working directory"=
-      (WEPPR::hash(binary.file, file=TRUE) == "aab6591e5ae146ee61eb7cf162aef605"))
+    (WEPPR::hash(binary.file, file=TRUE) == "aab6591e5ae146ee61eb7cf162aef605"))
 
   runfile <- readLines(file, 28)[c(22,23,25,24,10,16,21)]
   names(runfile) <- c("man","slp","sol","cli","wb","env","yld")
