@@ -63,7 +63,7 @@ run_wepp <- function(file) {
                             yld yield")
   type <- with(lookup, type[match(file.name,name)])
   uniquehash <- as.vector(WEPPR::hash(files, file = TRUE))
-  id <- WEPPR::hash(paste(uniquehash, collapse = ''),file = FALSE)
+  id <- digest::digest(paste(uniquehash, collapse = ''),algo= "md5")
   run.out <- data.frame("file_name" = as.vector(files),
                         "file_type" = type,
                         "type" = file.type,
