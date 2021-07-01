@@ -62,7 +62,7 @@ run_wepp <- function(file) {
                             wb  waterbalance
                             yld yield")
   type <- with(lookup, type[match(file.name,name)])
-  uniquehash <- as.vector(WEPPR::hash(files, file = TRUE))
+  uniquehash <- as.vector(WEPPR::hash(files))
   id <- digest::digest(paste(uniquehash, collapse = ''),algo= "md5")
   run.out <- data.frame("file_name" = as.vector(files),
                         "file_type" = type,
