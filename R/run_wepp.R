@@ -3,6 +3,7 @@
 #' An R interface to run the Water Erosion Prediction Project (WEPP) model.
 #'
 #' @param file A path to the file.
+#'
 #' @return A data frame containing the following elements:
 #' \describe{
 #'   \item{file}{character, file name}
@@ -21,28 +22,27 @@ run_wepp <- function(file) {
   stopifnot("Please run the function on Linux Operating System" =
               WEPPR::is_linux() == "TRUE")
 
-  #checks for the binary file
-  stopifnot("WEPP executable not found"= is_wepp_available() == "TRUE")
-  #binary.file <- list.files(getwd(), pattern = "wepp$")
-  #stopifnot(
-  #  "Please ensure wepp executable file is present in the working directory"=
-  #  (WEPPR::hash(binary.file, file=TRUE) == "aab6591e5ae146ee61eb7cf162aef605"))
+  #checks for the WEPP executable file
+  stopifnot("WEPP executable not found"= WEPPR::is_wepp_available() == "TRUE")
 
+  #read the files and seperates input and output files
   runfile <- readLines(file, 28)[c(22,23,25,24,10,16,21)]
   names(runfile) <- c("man","slp","sol","cli","wb","env","yld")
   input_files <- runfile[c("man","slp","sol","cli")]
   output_files <- runfile[c("wb","env","yld")]
 
-  #copies the input file and binary file to working directory
+  #copies the input file and the run file to working directory (tempdir)
   current.folder <- getwd()
   working.folder <- tempdir()
   file.copy(c(input_files,file), working.folder)
   setwd(working.folder)
 
   #runs the binary files using the input files and
-  #copies the output files to the working directory
+  #copies the output files to the original directory
   system(paste(command = 'wepp<',file,' > screen.txt'), wait = TRUE)
   file.copy(c(output_files,"screen.txt"), current.folder)
+  #set the original directory as working directory
+  setwd(current.folder)
   files <- c(output_files, input_files)
 
   #create the columns for data frame to be returned
@@ -50,6 +50,7 @@ run_wepp <- function(file) {
   file.type <- ifelse(file.name %in% c("cli","man","slp","sol"),"input",
                       ifelse(file.name %in% c("env","yld","wb","txt"),
                              "output","unknown"))
+  #table for deciding the type of file based on the name of the file
   lookup <-read.table(header = TRUE,
                       stringsAsFactors = FALSE,
                       text="name type
@@ -69,5 +70,7 @@ run_wepp <- function(file) {
                         "type" = file.type,
                         "md5sum" = uniquehash)
   run.out$Id <- id
+  #returns the dataframe consisting file name,
+  #file type, type, md5sum and unique id
   return(run.out)
 }
