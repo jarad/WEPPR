@@ -26,8 +26,7 @@ run_wepp <- function(file) {
   stopifnot("WEPP executable not found"= WEPPR::is_wepp_available() == "TRUE")
 
   #read the files and seperates input and output files
-  runfile <- readLines(file, 28)[c(22,23,25,24,10,16,21)]
-  names(runfile) <- c("man","slp","sol","cli","wb","env","yld")
+  runfile <- read_dep_run(file)
   input_files <- runfile[c("man","slp","sol","cli")]
   output_files <- runfile[c("wb","env","yld")]
 
