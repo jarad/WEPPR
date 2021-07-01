@@ -23,10 +23,10 @@ run_wepp <- function(file) {
 
   #checks for the binary file
   stopifnot("WEPP executable not found"= is_wepp_available() == "TRUE")
-  binary.file <- list.files(getwd(), pattern = "wepp$")
-  stopifnot(
-    "Please ensure wepp executable file is present in the working directory"=
-    (WEPPR::hash(binary.file, file=TRUE) == "aab6591e5ae146ee61eb7cf162aef605"))
+  #binary.file <- list.files(getwd(), pattern = "wepp$")
+  #stopifnot(
+  #  "Please ensure wepp executable file is present in the working directory"=
+  #  (WEPPR::hash(binary.file, file=TRUE) == "aab6591e5ae146ee61eb7cf162aef605"))
 
   runfile <- readLines(file, 28)[c(22,23,25,24,10,16,21)]
   names(runfile) <- c("man","slp","sol","cli","wb","env","yld")
@@ -36,7 +36,7 @@ run_wepp <- function(file) {
   #copies the input file and binary file to working directory
   current.folder <- getwd()
   working.folder <- tempdir()
-  file.copy(c(input_files,binary.file,file), working.folder)
+  file.copy(c(input_files,file), working.folder)
   setwd(working.folder)
 
   #runs the binary files using the input files and
