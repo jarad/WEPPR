@@ -68,7 +68,7 @@ run_wepp <- function(file) {
                         "file_type" = type,
                         "type" = file.type,
                         "md5sum" = uniquehash)
-  run.out$Id <- id
+  run.out$id <- id
   #returns the dataframe consisting file name,
   #file type, type, md5sum and unique id
   return(run.out)
