@@ -59,7 +59,7 @@ run_wepp <- function(file) {
                             run run
                             slp slope
                             sol soil
-                            wb  waterbalance
+                            wb  water_balance
                             yld yield")
   type <- with(lookup, type[match(file.name,name)])
   uniquehash <- as.vector(WEPPR::hash(files))
