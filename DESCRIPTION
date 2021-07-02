@@ -27,7 +27,7 @@ LazyData: true
 RoxygenNote: 7.1.1
 BugReports: https://github.com/jarad/WEPPR/issues
 Suggests: 
-    testthat (>= 2.1.0),
+    testthat (>= 3.0.0),
     reticulate (>= 1.18)
 Depends:
     R (>= 4.0)
