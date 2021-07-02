@@ -1,8 +1,8 @@
 Package: WEPPR
-Title: Runs WEPP and emulators
-Version: 0.0.0.9021
+Title: R interface to the Water Erosion Prediction Project (WEPP) model
+Version: 0.0.0.9022
 Authors@R: 
-    c(
+  c(
     person(given = "Jarad",
            family = "Niemi",
            role = c("aut", "cre"),
@@ -13,18 +13,23 @@ Authors@R:
            role = c("aut"),
            email = "gkuttube@ucsc.edu",
            comment = c(ORCID = "0000-0003-3765-108X"))
-    )
+  )
 Description: The Water Erosion Prediction Project (WEPP) computer model
-    simulates water erosion events and estimates runoff, soil detachment, and
-    soil loss. This package can run WEPP and emulators for WEPP. 
+simulates water erosion events and estimates runoff, soil detachment, and
+soil loss. This package intends to provide easy of access for R users to the
+WEPP model including reading and writing input and output files as well as
+running WEPP on Linux systems. The focus in development has been to read and
+write files associated with the Daily Erosion Project (DEP) and therefore some 
+idiosyncrasies associated with DEP are likely. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
+BugReports: https://github.com/jarad/WEPPR/issues
 Suggests: 
-    testthat (>= 3.0.0),
-    reticulate (>= 1.18)
+  testthat (>= 2.1.0),
+reticulate (>= 1.18)
 Depends:
-    R (>= 4.0)
+  R (>= 4.0)
 Imports: 
-    tools
+  tools
