@@ -10,16 +10,16 @@ read_sol <- function(file) {
   d <- readLines(file)
 
   tmp <- as.numeric(strsplit(d[3], split = " ")[[1]])
-  ntemp <- tmp[1]
+  n_layers <- tmp[1]
   ksflag <- tmp[2]
 
   OFEs <- list()
   layers <- list()
   conductivity <- list()
   i <- 4
-  for (n in 1:ntemp) {
+  for (n in 1:n_layers) {
     # line 1 for this soil type
-    tmp <- strsplit(d[i], split = " ")[[1]]
+    tmp <- scan(text=d[i], what='character', quiet=TRUE)
 
     nsl <- as.integer(tmp[3])
     OFEs[[n]] <- data.frame(layer  = n,
