@@ -11,6 +11,6 @@
 #'
 #' @importFrom tools md5sum
 #'
-hash <- function(files) {
+hash <- function(files){
   return(tools::md5sum(files))
 }
