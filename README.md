@@ -40,17 +40,27 @@ Development uses the [WEPP documentation extensively](https://www.ars.usda.gov/m
 ``` r
 library(WEPPR)
 
-## Input files
-read_cli("inst/extdata/092.63x040.90.cli")
-read_slp("inst/extdata/071000090603_2.slp")
-read_man("inst/extdata/071000090603_2.man")
-read_run("inst/extdata/071000090603_2.run")
-read_sol("inst/extdata/071000090603_2.sol")
+## get file path to data files
+fpath_cli <- system.file("extdata", "092.63x040.90.cli", package="WEPPR")
+fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
+fpath_man <- system.file("extdata", "071000090603_2.man", package="WEPPR")
+fpath_run <- system.file("extdata", "071000090603_2.run", package="WEPPR")
+fpath_sol <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
+fpath_env <- system.file("extdata", "071000090603_2.env", package="WEPPR")
+fpath_wb <- system.file("extdata", "071000090603_2.wb", package="WEPPR")
+fpath_yld <- system.file("extdata", "071000090603_2.yld", package="WEPPR")
 
-## Output files
-read_env("inst/extdata/071000090603_2.env")
-read_wb("inst/extdata/071000090603_2.wb")
-read_yld("inst/extdata/071000090603_2.yld")
+## read input files
+read_cli(fpath_cli)
+read_slp(fpath_slp)
+read_man(fpath_man)
+read_run(fpath_run)
+read_sol(fpath_sol)
+
+## read output files
+read_env(fpath_env)
+read_wb(fpath_wb)
+read_yld(fpath_yld)
 ```
 
 ## Acknowledgements
