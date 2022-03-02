@@ -1,0 +1,514 @@
+```{r}
+library(methods)
+library(WEPPR)
+library(tidyverse)
+library(plotly)
+library(reticulate)
+library(glue)
+# devtools::install_github("jarad/WEPPR")
+```
+
+# Slope data 
+
+## read slope data
+```{r}
+slp_df_ori <- read_slp("inst/extdata/071000090603_2.slp")
+```
+
+## "linearize" the data
+```{r}
+slp_df_ori
+
+remove_trailing_pattern <- '^(\\.\\d*?[1-9])0+$'
+
+linearize_slp <- function(slp_df_ori) {
+  slp_df <- slp_df_ori %>%
+    group_by(n) %>%
+    mutate(slp_distance = max(distance)) %>%
+    ungroup() %>%
+    select(slope, slp_distance) %>%
+    mutate(ID = paste("slp_slope", sep = "_", str_remove(
+      round(1:n() / n(), digits = 3), remove_trailing_pattern
+    ))) %>%
+    pivot_wider(names_from = ID, values_from = slope) %>%
+    summarise_all(sum, na.rm = T)
+  
+  slp_df
+}
+
+(slp_df <- linearize_slp(slp_df_ori))
+```
+
+
+## Plots
+
+### Get distance and slope data 
+
+```{r}
+distance <- slp_df_ori$distance %>%
+  as_tibble() %>%
+  mutate(diff = value - lag(value)) %>%
+  filter(diff >= 0) %>%
+  na.omit() %>%
+  pull(diff)
+
+slp_pnts <- unique(slp_df_ori$slope[-1])
+total_dist <- slp_df$slp_distance
+rbind(distance, slp_pnts)
+```
+
+### getting points
+
+```{r}
+get_points <- function(x, y, slope, distance) {
+  for (i in 1:length(slope)) {
+    curr_slope <- slope[i]
+    curr_dist <- distance[i]
+    theta <- atan(curr_slope)
+    slp_dist <- curr_dist / cos(theta)
+    # print(paste(length(x_0), " ", length(y_0)))
+    new_x <-  x[length(x)] + (slp_dist / sqrt(1 + curr_slope ^ 2))
+    new_y <-
+      y[length(y)] + (slp_dist * curr_slope / sqrt(1 + curr_slope ^ 2))
+    # print(paste(x, y))
+    x <- c(x, new_x)
+    y <- c(y, new_y)
+  }
+  res <- rbind(x, y)
+  res
+}
+
+(pnts <- get_points(0, 0, slp_pnts, distance))
+
+# scnd_point2 <- function(pnt, slope, distance) {
+#   y2 <- slope * (distance - pnt[1]) + pnt[2]
+#
+#   c(distance, y2)
+# }
+```
+
+## Slope plot
+
+```{r}
+distance <- slp_df_ori %>%   
+  as_tibble() %>% 
+  group_by(n) %>% 
+  mutate(diff = distance - lag(distance)) %>% 
+  ungroup(n) %>% 
+  mutate(cumsum = cumsum(ifelse(is.na(diff), 0, diff))) %>% 
+  select(cumsum) %>% 
+  pull()
+
+slp_data <- slp_df_ori$slope
+
+# ggplot(data=NULL, aes(x=distance, y=slp_data)) +
+#   geom_point() +
+#   geom_segment(
+#     aes(
+#     x = distance,
+#     y = slp_data,
+#     xend = c(distance[2:length(distance)], distance[length(distance)]),
+#     yend = slp_data)
+#   ) +
+#   theme_minimal() +
+#   labs(x = "distance", y = "slope", title="Slope (constant assumption)")
+
+ggplot(data=NULL, aes(distance, slp_data)) +
+  geom_point() +
+  geom_line() +
+  theme_minimal() +
+  labs(x = "distance", y = "slope", title="Slope (linear interpolation)")
+```
+
+## Elevation plot
+
+```{r}
+rbind(distance, slp_data)
+```
+
+
+### Testing out integrating linear function
+```{r}
+# save slope and c value for each segment
+get_c <- function(m, b, x, y) {
+  c <- y - (((m * x ^ 2) / 2) + (b * x))
+  c
+}
+
+y_func <- function(m, x, b, c) {
+  y <- ((m * x ^ 2) / 2) + (b * x) + c
+  y
+}
+
+x1 <- 0
+x2 <- 48.92767
+y1 <- 0.03302
+y2 <- 0.04087
+
+y_out <- c()
+
+m <- (y2 - y1) / (x2 - x1)
+
+b <- y1 - m * x1
+
+c <- get_c(m, b, x1, y1)
+
+for (x in seq(x1, x2, length.out = 1001)) {
+  y_out <- c(y_out, y_func(m, x, b, c))
+}
+
+x <- seq(x1, x2, length.out = 1001)
+y <- y_out
+
+if (length(x) == length(y)){
+  plot(x, -y)
+} else {
+  glue("x is {length(x)} and y is {length(y)}")
+}
+```
+
+```{r}
+rbind(distance, slp_data)
+```
+
+### Compute for all points
+```{r}
+get_c <- function(m, b, x, y) {
+  c <- y - (((m * x ^ 2) / 2) + (b * x))
+  c
+}
+
+y_func <- function(m, x, b, c) {
+  y <- ((m * x ^ 2) / 2) + (b * x) + c
+  y
+}
+
+m_list <- c()
+b_list <- c()
+c_list <- c()
+y_out <- c()
+
+for (i in 1:(length(distance) - 1)) {
+  y1 <- slp_data[i]
+  y2 <- slp_data[i + 1]
+  
+  x1 <- distance[i]
+  x2 <- distance[i + 1]
+  
+  if ((x2 - x1) == 0) {
+    next
+  }
+  
+  # print(glue("y1 - {y1}, y2 - {y2}"))
+  # print(glue("x1 - {x1}, x2 - {x2}"))
+ 
+  m <- (y2 - y1) / (x2 - x1)
+  b <- y1 - m * x1
+  
+  m_list <- c(m, m_list)
+  b_list <- c(b, b_list)
+# 
+#   print(glue("m - {m}"))
+#   print(glue("b - {b}"))
+#   print(" ")
+
+  c <- get_c(m, b, x1, y1)
+  
+  c_list <- c(c, c_list)
+  
+  # for (x in seq(x1, x2, length.out = 11)) {
+  #   y_out <- c(y_out, y_func(m, x, b, c))
+  # }
+}
+
+x_pnts <- c(unique(distance))
+y_pnts <- c(0)
+
+for (i in 1:(length(m_list))) {
+  y2 <- (m_list[i] * (x_pnts[i+1] - x_pnts[i])) + y_pnts[i]
+  y_pnts <- c(y_pnts, y2)
+}
+
+y_pnts
+
+
+# ggplot() +
+#   xlim(x_pnts[1],x_pnts[2]) +
+#   geom_function(
+#     fun = function(x)
+#       ((m_list[1] * x ^ 2) / 2) + (b_list[1]  * x) + c_list[1]
+#   )
+
+y_out <- c()
+
+for (i in 1:(length(x_pnts) - 1)) {
+  x1 <- x_pnts[i]
+  x2 <- x_pnts[i+1]
+  
+  for (x_val in seq(x_pnts[1], x_pnts[2], length.out = 11)) {
+    y_out <- c(y_out, y_func(m_list[i], x_val, b_list[i], c_list[i]))
+  }
+}
+
+
+x_out <- seq(0, max(distance), length.out = length(y_out))
+
+if (length(x_out) == length(y_out)) {
+  ggplot(data = NULL, aes(x_out, -y_out)) +
+    geom_point() +
+    geom_line() +
+    theme_minimal() +
+    labs(y = "elevation", x = "distance", title = "Elevation plot")
+
+} else {
+  glue("x is {length(x_out)} and y is {length(y_out)}")
+}
+```
+
+```{r}
+## Original
+ggplot(data = NULL, aes(x/total_dist, y)) +
+  geom_point() +
+  geom_line() +
+  theme_minimal() +
+  labs(y = "elevation", x = "distance")
+
+## negate slope
+ggplot(data = NULL, aes(x, -y)) +
+  geom_point() +
+  geom_line() +
+  theme_minimal() +
+  labs(y = "elevation", x = "distance", title="Elevation plot")
+```
+
+
+## Creating the slope class
+
+
+```{r}
+# constructor
+new_Slope <- function(x = data.frame()) {
+  stopifnot(is.data.frame(x))
+  structure(x, class = "Slope")
+}
+
+# validator
+validate_Slope <- function(slp_class) {
+  df <- tibble(n = slp_class$n, slope = slp_class$slope)
+  diff_sum <- df %>%
+    group_by(n) %>%
+    slice(c(1, n())) %>%
+    ungroup() %>%
+    mutate(diff = slope - lag(slope), diff_n = n - lag(n)) %>%
+    filter(diff_n == 1) %>%
+    summarize(valid = sum(diff)) %>%
+    pull()
+  
+  if (diff_sum != 0) {
+    stop("Slope does not match across OFE", call. = FALSE)
+  }
+}
+
+
+# create slope class
+slp_class <- new_Slope(slp_df_ori)
+
+# validate class
+validate_Slope(slp_class)
+
+# argument to plot elevation or slope points or both (default elevation)
+plot.Slope <- function(slp_class, ) {
+  df <- tibble(n = slp_class$n, distance = slp_class$distance, slope = slp_class$slope)
+  
+  distance <- df %>%
+    group_by(n) %>%
+    mutate(diff =  distance - lag(distance)) %>%
+    ungroup(n) %>%
+    mutate(cumsum = cumsum(ifelse(is.na(diff), 0, diff))) %>%
+    select(cumsum) %>%
+    pull()
+  
+  slp_data <- slp_df_ori$slope
+  
+  g <- ggplot(data = NULL, aes(distance, slp_data)) +
+    geom_point() +
+    geom_line() +
+    theme_minimal() +
+    labs(x = "distance", y = "slope", title = "Slope (linear interpolation)")
+  
+  g
+}
+
+plot(slp_class)
+```
+
+
+# Soil data
+
+## Read Soil data
+
+```{r}
+(sol_df_ori <- read_sol("inst/extdata/071000090603_2.sol"))
+```
+
+## Linearize Soil data
+
+```{r}
+distance_cum <- lapply(pnts[1,], function(x) {x[x!=0]}) %>% unlist()
+
+get_count <- function(df) {
+  dup <- c()
+  j = 0
+  for (i in 1:nrow(df)) {
+    d = 0
+    while (df[i,]$solthk > j) {
+      d = d + 1
+      j = j + 100
+    }
+    dup <- c(dup, d)
+  }
+
+  left <- 19 - sum(dup)
+  dup[length(dup)] <- dup[length(dup)] + left
+
+  dup
+}
+
+bins <- tibble(solthk = cbind(seq(0, 1800, by=100))) %>% pull()
+
+filtered <- sol_df_ori %>%
+  as_tibble() %>%
+  select(layer, solthk, sand, clay)
+
+dups_sol <- filtered  %>%
+  group_by(layer) %>%
+  group_map(~ get_count(.x)) %>%
+  unlist() %>%
+  cbind(freq = ., filtered) %>% 
+  map_df(., rep, .$freq) %>% 
+  select(layer, sand, clay)
+
+dups_sol %>%
+  group_by(layer) %>%
+  mutate(solthk_bin = bins, .before = sand) %>%
+  ungroup() %>%
+  mutate(id = row_number()) %>%
+  group_by(layer) %>%
+  pivot_wider(
+    names_from = c(layer, id, solthk_bin),
+    names_glue = "sol_{.value}_{round(distance_cum[layer], 3)}_{solthk_bin}",
+    values_from = c(sand, clay)
+  ) 
+```
+
+```{r}
+filtered %>% 
+  select(layer, solthk) %>% 
+  group_by(layer) %>% 
+  mutate(diff = solthk - lag(solthk, default=min(solthk))) %>% 
+  pull(diff)
+```
+
+
+## Plotting the soil file
+```{r}
+g <- sol_df_ori %>%
+  as_tibble() %>%
+  select(layer, solthk, sand, clay) %>%
+  group_by(layer) %>% 
+  mutate(diff = solthk - lag(solthk, default=min(solthk))) %>% 
+  ungroup() %>% 
+  mutate(layer = as.factor(layer)) %>%
+  pivot_longer(cols = c(sand, clay), names_to = "type") %>%
+  # mutate(type = as.factor(type)) %>%
+  ggplot(aes(y = -diff, x = layer, fill = value)) +
+  geom_bar(position = "stack", stat = "identity") +
+  scale_fill_continuous(trans = 'reverse') +
+  labs(x = "layer", y = "soil thickness (mm)")
+
+g + facet_wrap(~type)
+```
+
+## Creating the soil class
+
+```{r}
+# constructor
+new_Soil <- function(x = data.frame()) {
+  stopifnot(is.data.frame(x))
+  structure(x, class = "Soil")
+}
+
+# validator
+validate_Soil <- function(x) {
+  if(condition) {
+    stop("", call. = FALSE)
+  }
+}
+
+# create slope class
+sol_class <- new_Soil(sol_df_ori)
+
+# validate class
+validate_Soil(sol_class)
+
+plot.Soil <- function(sol_df_ori) {
+  
+}
+```
+
+
+# Slope Soil Class
+
+```{r}
+# constructor
+new_Slope_Soil <- function(x = data.frame(), y=data.frame()) {
+  stopifnot(is.data.frame(x))
+  stopifnot(is.data.frame(y))
+  structure(cbind(x, y), class = "Slope_Soil")
+}
+
+# validator
+validate_Slope_Soil <- function(x) {
+  if(condition) {
+    ## check if no. OFEs match, 
+    stop("Number of OFEs do not match", call. = FALSE)
+  }
+}
+
+# create slope class
+sol_class <- new_Slope_Soil(slp_df_ori, sol_df_ori)
+
+# validate class
+validate_Soil(sol_class)
+
+plot.Soil <- function(sol_df_ori) {
+  
+}
+```
+
+
+
+# Climate data
+```{r}
+fpath_cli <- system.file("extdata", "092.63x040.90.cli", package="WEPPR")
+read_cli(fpath_cli)
+```
+
+
+
+```{r}
+fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
+fpath_man <- system.file("extdata", "071000090603_2.man", package="WEPPR")
+fpath_run <- system.file("extdata", "071000090603_2.run", package="WEPPR")
+fpath_sol <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
+fpath_env <- system.file("extdata", "071000090603_2.env", package="WEPPR")
+fpath_wb <- system.file("extdata", "071000090603_2.wb", package="WEPPR")
+fpath_yld <- system.file("extdata", "071000090603_2.yld", package="WEPPR")
+
+read_slp(fpath_slp)
+read_man(fpath_man)
+read_run(fpath_run)
+read_env(fpath_env)
+read_wb(fpath_wb)
+read_yld(fpath_yld)
+```
