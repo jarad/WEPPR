@@ -173,11 +173,14 @@ rbind(distance, slp_data)
 
 ### Compute for all points
 ```{r}
+
+## function to calculate c from slope, intercept, x, and y
 get_c <- function(m, b, x, y) {
   c <- y - (((m * x ^ 2) / 2) + (b * x))
   c
 }
 
+## function to get y from quadratic equation
 y_func <- function(m, x, b, c) {
   y <- ((m * x ^ 2) / 2) + (b * x) + c
   y
@@ -189,12 +192,15 @@ c_list <- c()
 y_out <- c()
 
 for (i in 1:(length(distance) - 1)) {
+  
+  # get current and next points for distance and slope
   y1 <- slp_data[i]
   y2 <- slp_data[i + 1]
   
   x1 <- distance[i]
   x2 <- distance[i + 1]
   
+  # if difference is zero, skip
   if ((x2 - x1) == 0) {
     next
   }
@@ -202,25 +208,28 @@ for (i in 1:(length(distance) - 1)) {
   # print(glue("y1 - {y1}, y2 - {y2}"))
   # print(glue("x1 - {x1}, x2 - {x2}"))
  
+  # calculate slope
   m <- (y2 - y1) / (x2 - x1)
+  
+  # calculate intercept
   b <- y1 - m * x1
   
   m_list <- c(m, m_list)
   b_list <- c(b, b_list)
-# 
+
 #   print(glue("m - {m}"))
 #   print(glue("b - {b}"))
 #   print(" ")
 
+  # calculate c value
   c <- get_c(m, b, x1, y1)
   
   c_list <- c(c, c_list)
-  
-  # for (x in seq(x1, x2, length.out = 11)) {
-  #   y_out <- c(y_out, y_func(m, x, b, c))
-  # }
 }
 
+
+## trying out getting y2 value from x1, x2, y1, and m
+## realized there's no purpose in doing this
 x_pnts <- c(unique(distance))
 y_pnts <- c(0)
 
@@ -229,9 +238,7 @@ for (i in 1:(length(m_list))) {
   y_pnts <- c(y_pnts, y2)
 }
 
-y_pnts
-
-
+## trying out geom fuunction
 # ggplot() +
 #   xlim(x_pnts[1],x_pnts[2]) +
 #   geom_function(
@@ -245,14 +252,17 @@ for (i in 1:(length(x_pnts) - 1)) {
   x1 <- x_pnts[i]
   x2 <- x_pnts[i+1]
   
+  # for every interval x1 - x2, pass in the values of slope, intercept, x, and
+  # c to the y_func, and get a y value
   for (x_val in seq(x_pnts[1], x_pnts[2], length.out = 11)) {
     y_out <- c(y_out, y_func(m_list[i], x_val, b_list[i], c_list[i]))
   }
 }
 
-
+# get x values 
 x_out <- seq(0, max(distance), length.out = length(y_out))
 
+# if both values match, plot
 if (length(x_out) == length(y_out)) {
   ggplot(data = NULL, aes(x_out, -y_out)) +
     geom_point() +
@@ -412,12 +422,15 @@ filtered %>%
 
 ## Plotting the soil file
 ```{r}
+## use https://stackoverflow.com/questions/5948604/variable-width-bars-in-ggplot2-barplot-in-r 
+## for width of bar plot
+
 g <- sol_df_ori %>%
   as_tibble() %>%
   select(layer, solthk, sand, clay) %>%
-  group_by(layer) %>% 
-  mutate(diff = solthk - lag(solthk, default=min(solthk))) %>% 
-  ungroup() %>% 
+  group_by(layer) %>%
+  mutate(diff = solthk - lag(solthk, default = min(solthk))) %>%
+  ungroup() %>%
   mutate(layer = as.factor(layer)) %>%
   pivot_longer(cols = c(sand, clay), names_to = "type") %>%
   # mutate(type = as.factor(type)) %>%
@@ -426,30 +439,31 @@ g <- sol_df_ori %>%
   scale_fill_continuous(trans = 'reverse') +
   labs(x = "layer", y = "soil thickness (mm)")
 
-g + facet_wrap(~type)
+g + facet_wrap(~ type)
 ```
 
 ## Creating the soil class
 
 ```{r}
 # constructor
-new_Soil <- function(x = data.frame()) {
-  stopifnot(is.data.frame(x))
+new_Soil <- function(sol_df_ori = data.frame()) {
+  stopifnot(is.data.frame(sol_df_ori))
+  
+  ## validate
+  neg_cnt <- sol_df_ori %>% 
+    as_tibble() %>% 
+    filter(if_any(where(is.numeric), ~ .x < 0)) %>% 
+    nrow()
+         
+  if(neg_cnt != 0) {
+    stop("Negative values exist in data", call. = FALSE)
+  }
+  
   structure(x, class = "Soil")
 }
-
-# validator
-validate_Soil <- function(x) {
-  if(condition) {
-    stop("", call. = FALSE)
-  }
-}
-
+            
 # create slope class
 sol_class <- new_Soil(sol_df_ori)
-
-# validate class
-validate_Soil(sol_class)
 
 plot.Soil <- function(sol_df_ori) {
   
