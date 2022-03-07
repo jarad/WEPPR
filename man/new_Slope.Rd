@@ -7,13 +7,15 @@
 new_Slope(x = data.frame())
 }
 \arguments{
-\item{file}{A path to the slp file}
+\item{dataframe}{A slope dataframe}
 }
 \description{
-Creates a slope class from a slope (*.slp) file
+Creates a Slope class from a slope data frame
+Validates the slope file for matching OFEs
+Plots the slope plot and elevation plot
+Linearize the slope file into one WEPP run
 }
 \examples{
-example
 slp_class <- new_Slope(slp_data)
 validate_Slope(slp_class)
 plot(slp_class)

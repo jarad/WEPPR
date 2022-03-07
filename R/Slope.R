@@ -1,11 +1,13 @@
 #' Create a Slope Class
 #'
-#' Creates a slope class from a slope (*.slp) file
+#' Creates a Slope class from a slope data frame
+#' Validates the slope file for matching OFEs
+#' Plots the slope plot and elevation plot
+#' Linearize the slope file into one WEPP run
 #'
-#' @param file A path to the slp file
+#' @param dataframe A slope dataframe
 #' @export
 #' @examples
-#' example
 #' slp_class <- new_Slope(slp_data)
 #' validate_Slope(slp_class)
 #' plot(slp_class)
@@ -40,13 +42,11 @@ validate_Slope <- function(slp_class) {
 
 
 # argument to plot elevation or slope points or both (default elevation)
-plot.Slope <- function(slp_class,) {
-  # form data frame
+plot.Slope <- function(slp_class, type = "elevation") {
   df <- tibble(n = slp_class$n,
                distance = slp_class$distance,
                slope = slp_class$slope)
 
-  # calculate cumulative distance
   distance <- df %>%
     group_by(n) %>%
     mutate(diff =  distance - lag(distance)) %>%
@@ -55,16 +55,31 @@ plot.Slope <- function(slp_class,) {
     select(cumsum) %>%
     pull()
 
-  # get slope points
   slp_data <- slp_df_ori$slope
 
-  g <- ggplot(data = NULL, aes(distance, slp_data)) +
+
+  # slope plot
+  slp_plt <- ggplot(data = NULL, aes(distance, slp_data)) +
     geom_point() +
     geom_line() +
     theme_minimal() +
     labs(x = "distance", y = "slope", title = "Slope (linear interpolation)")
 
-  g
+  # elevation plot
+  elevation_plt <- ggplot()
+
+  if (type == "elevation") {
+    elevation_plt
+  }
+
+  else if (type == "slope") {
+    slp_plt
+  }
+
+  else {
+    slp_plt
+    elevation_plt
+  }
 }
 
 linearize_slp <- function(slp_df_ori) {
