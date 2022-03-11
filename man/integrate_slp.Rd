@@ -55,5 +55,5 @@ integrate_slp(slp)
 
 }
 \seealso{
-\code{\link{plot.Slope}}, \code{\link{expand_slp}}, \code{\link{remove_slp_transitions}}
+\code{\link{plot_Slope}}, \code{\link{expand_slp}}, \code{\link{remove_slp_transitions}}
 }

@@ -24,5 +24,5 @@ remove_slp_transitions(slp)
 remove_slp_transitions(data.frame(n = rep(1:3, times = c(3,4,5)))
 }
 \seealso{
-\code{\link{plot.Slope}}, \code{\link{expand_slp}}, \code{\link{integrate_slp}}
+\code{\link{plot_Slope}}, \code{\link{expand_slp}}, \code{\link{integrate_slp}}
 }
