@@ -4,19 +4,20 @@
 \alias{run_wepp}
 \title{Runs the WEPP model}
 \usage{
-run_wepp()
+run_wepp(file)
 }
 \arguments{
-\item{man}{A \code{man} object representing land management}
-
-\item{run}{A \code{run} object representing run settings}
-
-\item{slp}{A \code{slp} object representing slope}
-
-\item{sol}{A \code{sol} object representing sol}
-
-\item{path}{A path where files should be written. If null, files are written
-to a temporary directory and that directory is reported.}
+\item{file}{A path to the file.}
+}
+\value{
+A data frame containing the following elements:
+\describe{
+  \item{file}{character, file name}
+  \item{file_type}{character, type of file eg. climate, environment,..}
+  \item{type}{character, input/output}
+  \item{md5sum}{character, hash of the file}
+  \item{id}{character, conconated hash of hash of all the file names}
+}
 }
 \description{
 An R interface to run the Water Erosion Prediction Project (WEPP) model.
