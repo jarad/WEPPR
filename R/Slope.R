@@ -73,7 +73,7 @@ new_Slope <- function(x = data.frame()) {
 #' @return A \code{data.frame} that is a modified version of the Slope object
 #' with additional columns x, m, b, and c.
 #' @export
-#' @seealso \code{\link{plot_Slope}}, \code{\link{expand_slp}}, \code{\link{remove_slp_transitions}}
+#' @seealso \code{\link{plot.Slope}}, \code{\link{expand_slp}}, \code{\link{remove_slp_transitions}}
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
 #' integrate_slp(slp)
@@ -104,7 +104,7 @@ integrate_slp <- function(slp) {
 #' @param n a positive integer indicating how many equally-spaced distances to
 #'     calculate. Ignored if \code{distances} is provided.
 #' @return a data.frame containing distance, slope, and elevation
-#' @seealso \code{\link{plot_Slope}}, \code{\link{integrate_slp}}, \code{\link{remove_slp_transitions}}
+#' @seealso \code{\link{plot.Slope}}, \code{\link{integrate_slp}}, \code{\link{remove_slp_transitions}}
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
 #' expand_slp(slp)
@@ -141,7 +141,7 @@ expand_slp <- function(slp, distances = NULL, n = 1001) {
 #'
 #' @param slp A Slope object
 #' @return A modified Slope object with the first row of each new OFE removed.
-#' @seealso \code{\link{plot_Slope}}, \code{\link{expand_slp}}, \code{\link{integrate_slp}}
+#' @seealso \code{\link{plot.Slope}}, \code{\link{expand_slp}}, \code{\link{integrate_slp}}
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
 #' remove_slp_transitions(slp)
@@ -198,7 +198,7 @@ calculate_total_distance <- function(slp) {
 #' plot(slp, plots=c("elevation"))
 #' plot(slp)
 #'
-plot <- function(slp,n = 1001, plots = c("slope", "elevation")) {
+plot.Slope <- function(slp,n = 1001, plots = c("slope", "elevation")) {
 
   if (!require(ggplot2))
     stop("You must install the 'ggplot2' package.")
@@ -239,7 +239,7 @@ plot <- function(slp,n = 1001, plots = c("slope", "elevation")) {
 #'
 #' @param slp_class A slope object
 #'
-#' @example
+#' @examples
 #' linearized_slp <- linearize_slp(slp)
 #' @rdname Slope
 linearize_slp <- function(slp_class) {

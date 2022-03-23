@@ -10,7 +10,8 @@ read_slp(file)
 \item{file}{A path to the file.}
 }
 \value{
-A \code{slp} \code{data.frame} with attributes version control number,
+A \code{Slope} object with two classes - \code{data.frame} and \code{Slope}
+The data frame class has the attributes version control number,
   aspect of the profile (degrees from North) (azm), and
   representative profile width(m) fwidth, and the
   following columns:
