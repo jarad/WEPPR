@@ -10,7 +10,7 @@
 #' @rdname Slope
 #' @examples
 #' fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
-#' slp_data <- read_slp(fpath_slp)
+#' slp <- read_slp(fpath_slp)
 new_Slope <- function(x = data.frame()) {
   stopifnot(is.data.frame(x))
 
@@ -190,7 +190,6 @@ calculate_total_distance <- function(slp) {
 #' @param n (optional) a positive integer indicating how many points to evaluate for drawing
 #' @param plots (optional) a charcter vector indicating whether to draw the "slope", "elevation", or both
 #' @return a gtable containing plots of slope or elevation
-#' @rdname Slope
 #' @export
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
@@ -240,8 +239,8 @@ plot.Slope <- function(slp,n = 1001, plots = c("slope", "elevation")) {
 #' @param slp_class A slope object
 #'
 #' @examples
+#' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
 #' linearized_slp <- linearize_slp(slp)
-#' @rdname Slope
 linearize_slp <- function(slp_class) {
   remove_trailing0_pattern <- '^(\\.\\d*?[1-9])0+$'
 

@@ -3,48 +3,20 @@
 \name{Slope}
 \alias{Slope}
 \alias{new_Slope}
-\alias{plot.Slope}
-\alias{linearize_slp}
 \title{Create a Slope Class}
 \usage{
 new_Slope(x = data.frame())
-
-\method{plot}{Slope}(slp, n = 1001, plots = c("slope", "elevation"))
-
-linearize_slp(slp_class)
 }
 \arguments{
-\item{slp}{a Slope object}
-
-\item{n}{(optional) a positive integer indicating how many points to evaluate for drawing}
-
-\item{plots}{(optional) a charcter vector indicating whether to draw the "slope", "elevation", or both}
-
-\item{slp_class}{A slope object}
-
 \item{dataframe}{A slope dataframe}
-}
-\value{
-a gtable containing plots of slope or elevation
 }
 \description{
 The slope class constructor appends the Slope class to the slope data frame.
 The constructor validates the slope data frame, and the slope class provides
 functionality to plot the elevation and slope plot, and to linearize the
 slope data
-
-The Slope object contains distances and slopes. The remainder of the slopes
-need to be linearly interpolated. These linearly interpreted slopes are the
-derivative of the elevation (hillslope) profile. We start each hillslope at
-the point (0,0).
 }
 \examples{
 fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
-slp_data <- read_slp(fpath_slp)
-slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
-plot(slp, plots=c("slope"))
-plot(slp, plots=c("elevation"))
-plot(slp)
-
-linearized_slp <- linearize_slp(slp)
+slp <- read_slp(fpath_slp)
 }
