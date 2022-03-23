@@ -4,7 +4,8 @@
 #' This file contains slope information assumed to be in nondimensional distances.
 #'
 #' @param file A path to the file.
-#' @return A \code{slp} \code{data.frame} with attributes version control number,
+#' @return A \code{Slope} object with two classes - \code{data.frame} and \code{Slope}
+#' The data frame class has the attributes version control number,
 #'   aspect of the profile (degrees from North) (azm), and
 #'   representative profile width(m) fwidth, and the
 #'   following columns:
@@ -52,11 +53,11 @@ read_slp <- function(file) {
   if (any(OFEs$p>1))
     stop("OFEs are not in nondimensional distances")
 
-  class(OFEs) <- append(class(OFEs), "slp")
-
   attr(OFEs, "version") <- version
   attr(OFEs, "azm")     <- azm
   attr(OFEs, "fwidth")  <- fwidth
 
-  return(OFEs)
+  slp_obj <- new_Slope(OFEs)
+
+  return(slp_obj)
 }
