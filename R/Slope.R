@@ -23,6 +23,16 @@ new_Slope <- function(slp = data.frame()) {
     stop("Slope does not match across OFE", call. = FALSE)
   }
 
+  ## validate all numeric columns are positive
+  neg_cnt <- slp %>%
+    select(slope) %>%
+    filter(if_any(where(is.numeric), ~ .x < 0)) %>%
+    nrow()
+
+  if (neg_cnt != 0) {
+    stop("Negative values exist in slope data", call. = FALSE)
+  }
+
   class(slp) <- append(class(slp), "Slope")
 
   structure(slp, class = c("Slope", "data.frame"))
