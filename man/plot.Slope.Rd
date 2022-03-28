@@ -29,3 +29,6 @@ plot(slp, plots=c("elevation"))
 plot(slp)
 
 }
+\seealso{
+\code{\link{expand_slp}}
+}

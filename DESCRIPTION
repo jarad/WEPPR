@@ -1,6 +1,6 @@
 Package: WEPPR
 Title: R interface to the Water Erosion Prediction Project (WEPP) model
-Version: 0.0.0.9027
+Version: 0.0.0.9028
 Authors@R: 
   c(
     person(given = "Jarad",
@@ -12,7 +12,12 @@ Authors@R:
            family = "Kuttubekova",
            role = c("aut"),
            email = "gkuttube@ucsc.edu",
-           comment = c(ORCID = "0000-0003-3765-108X"))
+           comment = c(ORCID = "0000-0003-3765-108X")),
+    person(given = "Benedict",
+           family = "Neo",
+           role = c("aut"),
+           email = "benneo@iastate.edu",
+           comment = c(ORCID = "0000-0001-7520-3839"))
   )
 Description: The Water Erosion Prediction Project (WEPP) computer model
     simulates water erosion events and estimates runoff, soil detachment, and

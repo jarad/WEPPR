@@ -5,7 +5,7 @@
 \alias{new_Slope}
 \title{Create a Slope Class}
 \usage{
-new_Slope(x = data.frame())
+new_Slope(slp = data.frame())
 }
 \arguments{
 \item{dataframe}{A slope dataframe}

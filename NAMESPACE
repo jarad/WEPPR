@@ -2,6 +2,7 @@
 
 S3method(plot,Slope)
 export(calculate_baseline_effective_conductivity)
+export(calculate_diff_slope)
 export(calculate_total_distance)
 export(create_run)
 export(integrate_slp)

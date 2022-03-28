@@ -4,15 +4,24 @@
 \alias{linearize_slp}
 \title{Linearize the slope data file}
 \usage{
-linearize_slp(slp_class)
+linearize_slp(slp, n = 1001)
 }
 \arguments{
-\item{slp_class}{A slope object}
+\item{slp}{A slope object}
+
+\item{n}{(optional) a positive integer indicating how many slope columns to evaluate}
+}
+\value{
+a one-row dataframe containing total distance and slope columns
 }
 \description{
-Linearize the slope data file
+Converts the slope file into one WEPP run (data frame with one row)
 }
 \examples{
 slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
-linearized_slp <- linearize_slp(slp)
+lin_slp <- linearize_slp(slp)
+
+}
+\seealso{
+\code{\link{expand_slp}}
 }

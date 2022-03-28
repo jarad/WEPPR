@@ -6,17 +6,42 @@
 #' slope data
 #' @name Slope
 #' @param dataframe A slope dataframe
+#' @return Slope object with class \code{Slope} and \code{data.frame}
 #' @export
 #' @rdname Slope
 #' @examples
 #' fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
 #' slp <- read_slp(fpath_slp)
-new_Slope <- function(x = data.frame()) {
-  stopifnot(is.data.frame(x))
+new_Slope <- function(slp = data.frame()) {
+  stopifnot(is.data.frame(slp))
 
-  # validate slope class
-  # find rows where difference in n is 1 and difference in slope is zero
-  diff_sum <- x %>%
+  # validate matching slopes
+  diff_sum <- calculate_diff_slope(slp)
+
+  # difference = zero means the all slope between OFEs match
+  if (diff_sum != 0) {
+    stop("Slope does not match across OFE", call. = FALSE)
+  }
+
+  class(slp) <- append(class(slp), "Slope")
+
+  structure(slp, class = c("Slope", "data.frame"))
+}
+
+#' Calculates difference in OFE rows
+#'
+#' OFEs have matching slope as it transitions from one OFE to another. To validate
+#' this property, we calculate the difference of the last slope of an OFE and the first
+#' slope of the consecutive OFE and check whether this difference is zero.
+#'
+#' @param slp_df A slope data frame
+#' @return Sum of the lagged difference of slopes
+#' @seealso \code{\link{new_Slope}}
+#' @export
+#' @examples
+#' calculate_diff_slope(slp_df)
+calculate_diff_slope <- function(slp_df) {
+  diff_sum <- slp_df %>%
     group_by(n) %>%
     slice(c(1, n())) %>%
     ungroup() %>%
@@ -25,12 +50,7 @@ new_Slope <- function(x = data.frame()) {
     summarize(valid = sum(diff)) %>%
     pull()
 
-  # difference = zero means the all slope between OFEs match
-  if (diff_sum != 0) {
-    stop("Slope does not match across OFE", call. = FALSE)
-  }
-
-  structure(x, class = c("data.frame", "Slope"))
+  diff_sum
 }
 
 #' Modify Slope object by adding coefficients for slope and elevation calculations
@@ -179,6 +199,7 @@ calculate_total_distance <- function(slp) {
   total_distance
 }
 
+
 #' Plots the slope and elevation from a Slope object
 #'
 #' The Slope object contains distances and slopes. The remainder of the slopes
@@ -190,6 +211,7 @@ calculate_total_distance <- function(slp) {
 #' @param n (optional) a positive integer indicating how many points to evaluate for drawing
 #' @param plots (optional) a charcter vector indicating whether to draw the "slope", "elevation", or both
 #' @return a gtable containing plots of slope or elevation
+#' @seealso \code{\link{expand_slp}}
 #' @export
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
@@ -197,65 +219,70 @@ calculate_total_distance <- function(slp) {
 #' plot(slp, plots=c("elevation"))
 #' plot(slp)
 #'
-plot.Slope <- function(slp,n = 1001, plots = c("slope", "elevation")) {
+plot.Slope <-
+  function(slp,
+           n = 1001,
+           plots = c("slope", "elevation")) {
+    if (!require(ggplot2))
+      stop("You must install the 'ggplot2' package.")
 
-  if (!require(ggplot2))
-    stop("You must install the 'ggplot2' package.")
+    if (!require(gridExtra))
+      stop("You must install the 'gridExtra' package.")
 
-  if (!require(gridExtra))
-    stop("You must install the 'gridExtra' package.")
+    slp_expanded <- expand_slp(slp, n = n) %>% na.omit()
 
-  slp_expanded <- expand_slp(slp)
+    g_slope <- ggplot(slp_expanded, aes(x = x, y = slope)) +
+      geom_line() +
+      theme_minimal() +
+      labs(x = "distance (m)", y = "slope", title = "Slope (linear interpolation)")
 
-  g_slope <- ggplot(slp_expanded, aes(x = x, y = slope)) +
-    geom_line() +
-    theme_minimal() +
-    labs(x = "distance (m)", y = "slope", title = "Slope (linear interpolation)")
+    g_elevation <- ggplot(slp_expanded, aes(x = x, y = elevation)) +
+      geom_line() +
+      theme_minimal() +
+      labs(x = "distance (m)", y = "elevation", title = "Elevation")
 
-  g_elevation <- ggplot(slp_expanded, aes(x = x, y = elevation)) +
-    geom_line() +
-    theme_minimal() +
-    labs(x = "distance (m)", y = "elevation", title = "Elevation")
+    # both plots
+    if ("slope" %in% plots & "elevation" %in% plots) {
+      return(gridExtra::grid.arrange(g_slope, g_elevation))
+    }
 
+    # slope plot
+    if ("slope" %in% plots) {
+      return(g_slope)
+    }
 
-  # both plots
-  if ("slope" %in% plots & "elevation" %in% plots) {
-    return(gridExtra::grid.arrange(g_slope, g_elevation))
+    # elevation plot
+    if ("elevation" %in% plots) {
+      return(g_elevation)
+    }
   }
-
-  # slope plot
-  if ("slope" %in% plots) {
-    return(g_slope)
-  }
-
-  # elevation plot
-  if ("elevation" %in% plots) {
-    return(g_elevation)
-  }
-}
 
 #' Linearize the slope data file
 #'
-#' @param slp_class A slope object
+#' Converts the slope file into one WEPP run (data frame with one row)
 #'
+#' @param slp A slope object
+#' @param n (optional) a positive integer indicating how many slope columns to evaluate
+#' @seealso \code{\link{expand_slp}}
+#' @return a one-row dataframe containing total distance and slope columns
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
-#' linearized_slp <- linearize_slp(slp)
-linearize_slp <- function(slp_class) {
-  remove_trailing0_pattern <- '^(\\.\\d*?[1-9])0+$'
+#' lin_slp <- linearize_slp(slp)
+#'
+linearize_slp <- function(slp, n = 1001) {
+  remove_trail_patt <- '^(\\.\\d*?[1-9])0+$'
 
-  slp_df <- df %>%
-    group_by(n) %>%
-    mutate(slp_distance = max(distance)) %>%
-    ungroup() %>%
-    select(slope, slp_distance) %>%
-    mutate(ID = paste(
-      "slp_slope",
-      sep = "_",
-      str_remove(round(1:n() / n(), digits = 3), remove_trailing0_pattern)
-    )) %>%
-    pivot_wider(names_from = ID, values_from = slope) %>%
-    summarise_all(sum, na.rm = T)
+  total_dist <- tail(calculate_total_distance(slp), n = 1)
 
-  slp_df
+  lin_slp <- slp %>%
+    expand_slp(n = n) %>%
+    select(slope) %>%
+    mutate(ID = str_remove(round(1:n / n, digits = 4), remove_trail_patt)) %>%
+    pivot_wider(
+      names_from = ID,
+      names_prefix = "slp_slope_",
+      values_from = slope
+    )
+
+  cbind(total_dist, lin_slp)
 }
