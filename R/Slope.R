@@ -33,9 +33,9 @@ new_Slope <- function(slp = data.frame()) {
     stop("Negative values exist in slope data", call. = FALSE)
   }
 
-  class(slp) <- append(class(slp), "Slope")
+  class(slp) <- append("Slope", class(slp))
 
-  structure(slp, class = c("Slope", "data.frame"))
+  structure(slp)
 }
 
 #' Calculates difference in OFE rows
