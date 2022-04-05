@@ -5,7 +5,7 @@
 #' functionality to plot the elevation and slope plot, and to linearize the
 #' slope data
 #' @name Slope
-#' @param dataframe A slope dataframe
+#' @param slp A slope data frame
 #' @return Slope object with class \code{Slope} and \code{data.frame}
 #' @export
 #' @rdname Slope
@@ -18,18 +18,17 @@ new_Slope <- function(slp = data.frame()) {
   # validate matching slopes
   diff_sum <- calculate_diff_slope(slp)
 
+  # validate all p are between 0 and 1
+  if (any(slp$p > 1 || slp$p < 0))
+    stop("OFEs are not in nondimensional distances")
+
   # difference = zero means the all slope between OFEs match
   if (diff_sum != 0) {
     stop("Slope does not match across OFE", call. = FALSE)
   }
 
-  ## validate all numeric columns are positive
-  neg_cnt <- slp %>%
-    select(slope) %>%
-    filter(if_any(where(is.numeric), ~ .x < 0)) %>%
-    nrow()
-
-  if (neg_cnt != 0) {
+  # validate there are no negative values
+  if (any(slp < 0)) {
     stop("Negative values exist in slope data", call. = FALSE)
   }
 
