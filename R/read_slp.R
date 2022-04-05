@@ -50,8 +50,6 @@ read_slp <- function(file) {
   }
 
   OFEs <- do.call(rbind, OFEs)
-  if (any(OFEs$p>1))
-    stop("OFEs are not in nondimensional distances")
 
   attr(OFEs, "version") <- version
   attr(OFEs, "azm")     <- azm
