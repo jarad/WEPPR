@@ -4,6 +4,7 @@
 #' This file contains soil information.
 #'
 #' @param file A path to the file.
+#' @return A \code{Soil} object with two classes - \code{Soil} and \code{data.frame}
 #' @export
 #'
 read_sol <- function(file) {
@@ -53,11 +54,11 @@ read_sol <- function(file) {
   soil <- merge(OFEs, layers, by = "layer", all = TRUE)
   soil <- merge(soil, conductivity, by = "layer", all = TRUE)
 
-  class(soil) <- append(class(soil), "sol")
-
   attr(soil, "datver") <- d[1]
   attr(soil, "solcom") <- d[2]
   attr(soil, "ksflag") <- ksflag
 
-  return(soil)
+  sol <- new_Soil(soil)
+
+  return(sol)
 }

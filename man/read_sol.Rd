@@ -9,6 +9,9 @@ read_sol(file)
 \arguments{
 \item{file}{A path to the file.}
 }
+\value{
+A \code{Soil} object with two classes - \code{Soil} and \code{data.frame}
+}
 \description{
 Reads a Water Erosion Prediction Project (WEPP) soil (*.sol) file.
 This file contains soil information.

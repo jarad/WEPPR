@@ -10,7 +10,7 @@ calculate_diff_slope(slp_df)
 \item{slp_df}{A slope data frame}
 }
 \value{
-Sum of the lagged difference of slopes and OFEs
+Sum of the lagged difference of slopes
 }
 \description{
 OFEs have matching slope as it transitions from one OFE to another. To validate
@@ -19,4 +19,7 @@ slope of the consecutive OFE and check whether this difference is zero.
 }
 \examples{
 calculate_diff_slope(slp_df)
+}
+\seealso{
+\code{\link{new_Slope}}
 }

@@ -8,7 +8,7 @@
 new_Slope(slp = data.frame())
 }
 \arguments{
-\item{dataframe}{A slope dataframe}
+\item{slp}{A slope data frame}
 }
 \value{
 Slope object with class \code{Slope} and \code{data.frame}
