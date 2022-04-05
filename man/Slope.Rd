@@ -10,6 +10,9 @@ new_Slope(slp = data.frame())
 \arguments{
 \item{dataframe}{A slope dataframe}
 }
+\value{
+Slope object with class \code{Slope} and \code{data.frame}
+}
 \description{
 The slope class constructor appends the Slope class to the slope data frame.
 The constructor validates the slope data frame, and the slope class provides

@@ -35,7 +35,7 @@ new_Slope <- function(slp = data.frame()) {
 
   class(slp) <- append("Slope", class(slp))
 
-  structure(slp)
+  return(structure(slp))
 }
 
 #' Calculates difference in OFE rows
@@ -60,7 +60,7 @@ calculate_diff_slope <- function(slp_df) {
     summarize(valid = sum(diff)) %>%
     pull()
 
-  diff_sum
+  return(diff_sum)
 }
 
 #' Modify Slope object by adding coefficients for slope and elevation calculations
@@ -206,7 +206,8 @@ calculate_total_distance <- function(slp) {
     }
     total_distance[i] <- slp$distance[i] + offset
   }
-  total_distance
+
+  return(total_distance)
 }
 
 
@@ -229,43 +230,40 @@ calculate_total_distance <- function(slp) {
 #' plot(slp, plots=c("elevation"))
 #' plot(slp)
 #'
-plot.Slope <-
-  function(slp,
-           n = 1001,
-           plots = c("slope", "elevation")) {
-    if (!require(ggplot2))
-      stop("You must install the 'ggplot2' package.")
+plot.Slope <- function(slp, n = 1001, plots = c("slope", "elevation")) {
+  if (!require(ggplot2))
+    stop("You must install the 'ggplot2' package.")
 
-    if (!require(gridExtra))
-      stop("You must install the 'gridExtra' package.")
+  if (!require(gridExtra))
+    stop("You must install the 'gridExtra' package.")
 
-    slp_expanded <- expand_slp(slp, n = n) %>% na.omit()
+  slp_expanded <- expand_slp(slp, n = n) %>% na.omit()
 
-    g_slope <- ggplot(slp_expanded, aes(x = x, y = slope)) +
-      geom_line() +
-      theme_minimal() +
-      labs(x = "distance (m)", y = "slope", title = "Slope (linear interpolation)")
+  g_slope <- ggplot(slp_expanded, aes(x = x, y = slope)) +
+    geom_line() +
+    theme_minimal() +
+    labs(x = "distance (m)", y = "slope", title = "Slope (linear interpolation)")
 
-    g_elevation <- ggplot(slp_expanded, aes(x = x, y = elevation)) +
-      geom_line() +
-      theme_minimal() +
-      labs(x = "distance (m)", y = "elevation", title = "Elevation")
+  g_elevation <- ggplot(slp_expanded, aes(x = x, y = elevation)) +
+    geom_line() +
+    theme_minimal() +
+    labs(x = "distance (m)", y = "elevation", title = "Elevation")
 
-    # both plots
-    if ("slope" %in% plots & "elevation" %in% plots) {
-      return(gridExtra::grid.arrange(g_slope, g_elevation))
-    }
-
-    # slope plot
-    if ("slope" %in% plots) {
-      return(g_slope)
-    }
-
-    # elevation plot
-    if ("elevation" %in% plots) {
-      return(g_elevation)
-    }
+  # both plots
+  if ("slope" %in% plots & "elevation" %in% plots) {
+    return(gridExtra::grid.arrange(g_slope, g_elevation))
   }
+
+  # slope plot
+  if ("slope" %in% plots) {
+    return(g_slope)
+  }
+
+  # elevation plot
+  if ("elevation" %in% plots) {
+    return(g_elevation)
+  }
+}
 
 #' Linearize the slope data file
 #'
@@ -294,5 +292,7 @@ linearize_slp <- function(slp, n = 1001) {
       values_from = slope
     )
 
-  cbind(total_dist, lin_slp)
+  lin_slp_dist <- cbind(total_dist, lin_slp)
+
+  return(lin_slp_dist)
 }

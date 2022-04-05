@@ -57,7 +57,7 @@ read_slp <- function(file) {
   attr(OFEs, "azm")     <- azm
   attr(OFEs, "fwidth")  <- fwidth
 
-  slp_obj <- new_Slope(OFEs)
+  slp <- new_Slope(OFEs)
 
-  return(slp_obj)
+  return(slp)
 }
