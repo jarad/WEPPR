@@ -272,6 +272,7 @@ plot.Slope <- function(slp, n = 1001, plots = c("slope", "elevation")) {
 #' @param n (optional) a positive integer indicating how many slope columns to evaluate
 #' @seealso \code{\link{expand_slp}}
 #' @return a one-row dataframe containing total distance and slope columns
+#' @export
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
 #' lin_slp <- linearize_slp(slp)

@@ -118,20 +118,17 @@ merge_slp_sol <- function(slp, sol) {
 #' lin_sol <- linearize_sol(slp_sol)
 #'
 linearize_sol <- function(slp_sol) {
-
-  norm_dist_cum <- slp_sol %>%
-    summarize(cum_dist=cumsum(unique(distance))) %>%
-    summarize(norm_cum_dist=cum_dist/max(cum_dist)) %>%
-    pull()
+  slp_sol %<>%
+    mutate(cum_dist = calculate_cum_dist(layer, distance)) %>%
+    mutate(norm_cum_dist = cum_dist / max(cum_dist))
 
   # create solthk bin vector
   bins <- tibble(solthk = cbind(seq(0, 1800, by = 100))) %>% pull()
 
   # filter numeric values
-  filter_num <- sol %>%
-    as_tibble() %>%
+  filter_num <- slp_sol %>%
     select_if(is.numeric) %>%
-    select(-Ke,-flag_Kb_Ke,-unknown)
+    select(-slope, -distance, -cum_dist)
 
   # duplicate rows based on count
   dups_sol <- filter_num %>%
@@ -151,8 +148,8 @@ linearize_sol <- function(slp_sol) {
     mutate(id = row_number()) %>%
     group_by(layer) %>%
     pivot_wider(
-      names_from = c(layer, id, solthk_bin),
-      names_glue = "sol_{.value}_{round(norm_dist_cum[layer], 3)}_{solthk_bin}",
+      names_from = c(layer, id, solthk_bin, norm_cum_dist),
+      names_glue = "sol_{.value}_{round(norm_cum_dist, 3)}_{solthk_bin}",
       values_from = c(salb:rfg)
     )
 
@@ -232,9 +229,7 @@ plot.Soil <- function(slp_sol) {
 
   # loop through each type and plot
   combined_plt <- ggarrange(
-    plotlist = lapply(split(
-      slp_sol_df_pivot, slp_sol_df_pivot$type
-    ), function(x) {
+    plotlist = lapply(split(slp_sol_pivot, slp_sol_pivot$type), function(x) {
       x %>%
         group_by(layer) %>%
         mutate(y_max = cumsum(diff)) %>%
