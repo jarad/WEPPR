@@ -268,7 +268,7 @@ plot.Slope <- function(slp, n = 1001, plots = c("slope", "elevation")) {
 #'
 #' Converts the slope file into one WEPP run (data frame with one row)
 #'
-#' @param slp A slope object
+#' @param slp A \code{slp} object
 #' @param n (optional) a positive integer indicating how many slope columns to evaluate
 #' @seealso \code{\link{expand_slp}}
 #' @return a one-row dataframe containing total distance and slope columns
@@ -295,4 +295,18 @@ linearize_slp <- function(slp, n = 1001) {
   lin_slp_dist <- cbind(total_dist, lin_slp)
 
   return(lin_slp_dist)
+}
+
+
+#' Write the slope data file
+#'
+#' @param slp A \code{slp} object.
+#' @param path Path to write to.
+#' @export
+#' @examples
+#' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
+#' write_slp(slp, "example.slp")
+#'
+write_slp_file <- function(slp, path) {
+  write_slp(slp, path)
 }
