@@ -228,8 +228,8 @@ plot.Soil <- function(slp_sol) {
     pivot_longer(c(salb:rfg), names_to = "type")
 
   # loop through each type and plot
-  combined_plt <- ggarrange(
-    plotlist = lapply(split(slp_sol_pivot, slp_sol_pivot$type), function(x) {
+  combined_plt <-
+    ggarrange(plotlist = lapply(split(slp_sol_pivot, slp_sol_pivot$type), function(x) {
       x %>%
         group_by(layer) %>%
         mutate(y_max = cumsum(diff)) %>%
@@ -244,15 +244,24 @@ plot.Soil <- function(slp_sol) {
           ymax = -y_max
         )) +
         geom_rect(aes(fill = value), colour = "grey20") +
-        scale_fill_continuous(limit = c(0, 100),
-                              low = "#56B1F7",
-                              high = "#132B43") +
         labs(x = "distance", y = "soil thickness (mm)") +
         ggtitle(x$type[1])
-    }),
-    ncol = 2,
-    nrow = 2
-  )
+    }))
 
   return(combined_plt)
+}
+
+
+#' Write the soil data file
+#'
+#' @param sol A \code{sol} object.
+#' @param path Path to write to.
+#' @export
+#' @examples
+#' #' fpath_sol <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
+#' sol <- read_sol(fpath_sol)
+#' write_sol(sol, "example.sol")
+#'
+write_sol_file <- function(sol, path) {
+  write_sol(sol, path)
 }
