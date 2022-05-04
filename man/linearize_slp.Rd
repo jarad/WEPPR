@@ -7,7 +7,7 @@
 linearize_slp(slp, n = 1001)
 }
 \arguments{
-\item{slp}{A slope object}
+\item{slp}{A \code{slp} object}
 
 \item{n}{(optional) a positive integer indicating how many slope columns to evaluate}
 }
