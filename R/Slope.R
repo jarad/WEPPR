@@ -133,6 +133,7 @@ integrate_slp <- function(slp) {
 #' @param n a positive integer indicating how many equally-spaced distances to
 #'     calculate. Ignored if \code{distances} is provided.
 #' @return a data.frame containing distance, slope, and elevation
+#' @export
 #' @seealso \code{\link{plot.Slope}}, \code{\link{integrate_slp}}, \code{\link{remove_slp_transitions}}
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
