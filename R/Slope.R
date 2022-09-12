@@ -244,7 +244,7 @@ plot.Slope <- function(slp, n = 1001, plots = c("slope", "elevation")) {
     theme_minimal() +
     labs(x = "distance (m)", y = "slope", title = "Slope (linear interpolation)")
 
-  g_elevation <- ggplot(slp_expanded, aes(x = x, y = elevation)) +
+  g_elevation <- ggplot(slp_expanded, aes(x = x, y = elevation - tail(elevation, 1))) +
     geom_line() +
     theme_minimal() +
     labs(x = "distance (m)", y = "elevation", title = "Elevation")
