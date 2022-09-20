@@ -18,7 +18,7 @@ new_Slope <- function(slp = data.frame()) {
   diff_sum <- calculate_diff_slope(slp)
 
   # validate all p are between 0 and 1
-  if (any(slp$p > 1 || slp$p < 0))
+  if (!all(between(slp$p, 0, 1)))
     stop("OFEs are not in nondimensional distances")
 
   # difference = zero means the all slope between OFEs match
