@@ -1,4 +1,4 @@
-sol_file <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
+slp_file <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
 
 test_that("propotion values are all between range 0 and 1", {
   slp <- read_slp(slp_file)
