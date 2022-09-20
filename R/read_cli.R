@@ -84,7 +84,10 @@ read_cli <- function(file, breakpoints = NULL) {
   # what else do we need to extract?
   # tmp = readLines(file)
 
+  cli <- new_Climate(cli)
+
   # return precip
+
   return(cli)
 }
 
