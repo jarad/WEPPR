@@ -16,7 +16,7 @@ Soil object with class \code{Soil} and \code{data.frame}
 \description{
 The soil class constructor appends the Soil class to the Soil object
 The constructor validates the soil data frame, and the Soil class provides
-functionality to plot the soil features and to linearize the Soil data
+functionality to plot the soil features and to interpolate the Soil data
 }
 \examples{
 fpath_sol <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
