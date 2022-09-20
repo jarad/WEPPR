@@ -118,10 +118,7 @@ expand_cli <- function(cli, n = 1001) {
 #' plot(cli, date = "2017-09-21", plots=c("ppt_cum"))
 #' plot(cli, date = "2017-09-21")
 #'
-plot.Climate <- function(cli,
-                         n = 1001,
-                         Date = NULL,
-                         plots = c("ppt_inst", "ppt_cum")) {
+plot.Climate <- function(cli, n = 1001, Date = NULL, plots = c("ppt_inst", "ppt_cum")) {
   if (!require(ggplot2))
     stop("You must install the 'ggplot2' package.")
 
@@ -136,7 +133,25 @@ plot.Climate <- function(cli,
       summarize(max_ppt = max(pptcum)) %>%
       ggplot(aes(x = date, y = max_ppt)) +
       geom_line()
+
     return(ppt_day)
+  }
+
+  is_date = function(x) {
+    formatted = try(as.Date(x, "%Y-%m-%d"), silent = TRUE)
+    is_date = as.character(formatted) == x & !is.na(formatted)  # valid and identical to input
+    is_date[is.na(x)] = NA  # Insert NA for NA in x
+    return(is_date)
+  }
+
+  # validate Date string is a date
+  if (!is_date(Date)) {
+    stop("Date given is not a Date or does not follow YYYY-MM-DD format", call. = FALSE)
+  }
+
+  # validate Date exist in data frame
+  if (!any(Date == cli$date)) {
+    stop("Date given not within cli data frame", call. = FALSE)
   }
 
   expanded_cli <- cli %>%
