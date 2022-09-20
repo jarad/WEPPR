@@ -128,6 +128,9 @@ plot.Soil <- function(slp_sol) {
   if (!require(ggpubr))
     stop("You must install the 'ggpubr' package.")
 
+  if (!require(tidyr))
+    stop("You must install the 'gridExtra' package.")
+
   # pivot data to bring features into one column, and its values in another
   slp_sol_pivot <- slp_sol %>%
     group_by(layer) %>%
