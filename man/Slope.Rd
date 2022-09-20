@@ -16,7 +16,7 @@ Slope object with class \code{Slope} and \code{data.frame}
 \description{
 The slope class constructor appends the Slope class to the slope data frame.
 The constructor validates the slope data frame, and the slope class provides
-functionality to plot the elevation and slope plot, and to linearize the
+functionality to plot the elevation and slope plot, and to interpolate the
 slope data
 }
 \examples{

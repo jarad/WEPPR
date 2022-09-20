@@ -27,5 +27,5 @@ slp_sol
 
 }
 \seealso{
-\code{\link{plot.Soil}}, \code{\link{linearize_sol}}
+\code{\link{plot.Soil}}
 }

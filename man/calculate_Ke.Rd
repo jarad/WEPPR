@@ -24,6 +24,6 @@ Calculate time-invariant effective hydraulic conductivity (Ke-constant)
 }
 \section{Functions}{
 \itemize{
-\item \code{calculate_Kef}: fallow soil Ke
-}}
+\item \code{calculate_Kef()}: fallow soil Ke
 
+}}

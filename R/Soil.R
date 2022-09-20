@@ -2,11 +2,10 @@
 #'
 #' The soil class constructor appends the Soil class to the Soil object
 #' The constructor validates the soil data frame, and the Soil class provides
-#' functionality to plot the soil features and to linearize the Soil data
+#' functionality to plot the soil features and to interpolate the Soil data
 #' @name Soil
 #' @param sol A soil dataframe
 #' @return Soil object with class \code{Soil} and \code{data.frame}
-#' @export
 #' @rdname Soil
 #' @examples
 #' fpath_sol <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
@@ -29,49 +28,12 @@ new_Soil <- function(sol = data.frame()) {
 }
 
 
-#' Calculate the duplicate count for each row based on solthk bin for linearizing
-#' soil file
-#'
-#' @param sol A soil object
-#' @return A numeric vector of duplicate counts
-#' @seealso \code{\link{linearize_sol}}
-#' @export
-#' @examples
-#' dup_counts <- get_dup_count(sol)
-#' dup_counts
-#'
-get_dup_count <- function(sol) {
-  dup <- c()
-  j = 0
-
-  # loop through each value
-  for (i in 1:nrow(sol)) {
-    d = 0
-
-    # while it's greater than bin value, increment
-    while (sol[i, ]$solthk > j) {
-      d = d + 1
-      j = j + 100
-    }
-    dup <- c(dup, d)
-  }
-
-  # calculate duplicates of the final bin (19th)
-  left <- 19 - sum(dup)
-
-  # add it to the final duplicate value
-  dup[length(dup)] <- dup[length(dup)] + left
-
-  return(dup)
-}
-
-
 #' Merge Slope and Soil object to provide Soil object with distance for plotting
 #'
 #' @param layer the layer column in sol object
 #' @param distance the distance column in sol object
 #' @return slp_sol object with class Soil and tibble
-#' @seealso \code{\link{plot.Soil}}, \code{\link{linearize_sol}}
+#' @seealso \code{\link{plot.Soil}}
 #' @export
 #' @examples
 #' fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
@@ -105,57 +67,6 @@ merge_slp_sol <- function(slp, sol) {
 }
 
 
-#' Linearize the soil data file
-#'
-#' Converts the soil file into one WEPP run (data frame with one row)
-#'
-#' @param slp_sol A Soil object combined with slope data
-#' @seealso \code{\link{expand_slp}}
-#' @return a one-row dataframe containing soil data
-#' @export
-#' @examples
-#' slp_sol <- merge_slp_sol(slp, sol)
-#' lin_sol <- linearize_sol(slp_sol)
-#'
-linearize_sol <- function(slp_sol) {
-  slp_sol %<>%
-    mutate(cum_dist = calculate_cum_dist(layer, distance)) %>%
-    mutate(norm_cum_dist = cum_dist / max(cum_dist))
-
-  # create solthk bin vector
-  bins <- tibble(solthk = cbind(seq(0, 1800, by = 100))) %>% pull()
-
-  # filter numeric values
-  filter_num <- slp_sol %>%
-    select_if(is.numeric) %>%
-    select(-slope, -distance, -cum_dist)
-
-  # duplicate rows based on count
-  dups_sol <- filter_num %>%
-    group_by(layer) %>%
-    group_map( ~ get_dup_count(.x)) %>%
-    unlist() %>%
-    cbind(freq = ., filter_num) %>%
-    mutate(freq = map(freq, seq_len)) %>%
-    unnest(freq) %>%
-    select(-freq)
-
-  # linearize data
-  lin_sol <- dups_sol %>%
-    group_by(layer) %>%
-    mutate(solthk_bin = bins, .before = sand) %>%
-    ungroup() %>%
-    mutate(id = row_number()) %>%
-    group_by(layer) %>%
-    pivot_wider(
-      names_from = c(layer, id, solthk_bin, norm_cum_dist),
-      names_glue = "sol_{.value}_{round(norm_cum_dist, 3)}_{solthk_bin}",
-      values_from = c(salb:rfg)
-    )
-
-  return(lin_sol)
-}
-
 
 #' Calculate cumulative distance across groups used for linearizing the soil file
 #'
@@ -163,7 +74,6 @@ linearize_sol <- function(slp_sol) {
 #' @param distance the distance column in sol object
 #' @return a numeric vector containing cumulative distance
 #' @seealso \code{\link{plot.Soil}}
-#' @export
 #' @examples
 #' calculate_cum_dist(sol$layer, sol$distance)
 #'
@@ -185,7 +95,6 @@ calculate_cum_dist <- function(layer, distance) {
 #' @param distance the distance column in sol object
 #' @return a numeric vector xmin needed to plot geom_rect
 #' @seealso \code{\link{plot.Soil}}
-#' @export
 #' @examples
 #' get_xmin(sol$layer, sol$distance)
 #'

@@ -2,12 +2,11 @@
 #'
 #' The slope class constructor appends the Slope class to the slope data frame.
 #' The constructor validates the slope data frame, and the slope class provides
-#' functionality to plot the elevation and slope plot, and to linearize the
+#' functionality to plot the elevation and slope plot, and to interpolate the
 #' slope data
 #' @name Slope
 #' @param slp A slope data frame
 #' @return Slope object with class \code{Slope} and \code{data.frame}
-#' @export
 #' @rdname Slope
 #' @examples
 #' fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
@@ -46,7 +45,6 @@ new_Slope <- function(slp = data.frame()) {
 #' @param slp_df A slope data frame
 #' @return Sum of the lagged difference of slopes
 #' @seealso \code{\link{new_Slope}}
-#' @export
 #' @examples
 #' calculate_diff_slope(slp_df)
 calculate_diff_slope <- function(slp_df) {
@@ -101,7 +99,6 @@ calculate_diff_slope <- function(slp_df) {
 #' @param slp A Slope object
 #' @return A \code{data.frame} that is a modified version of the Slope object
 #' with additional columns x, m, b, and c.
-#' @export
 #' @seealso \code{\link{plot.Slope}}, \code{\link{expand_slp}}, \code{\link{remove_slp_transitions}}
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
@@ -133,7 +130,6 @@ integrate_slp <- function(slp) {
 #' @param n a positive integer indicating how many equally-spaced distances to
 #'     calculate. Ignored if \code{distances} is provided.
 #' @return a data.frame containing distance, slope, and elevation
-#' @export
 #' @seealso \code{\link{plot.Slope}}, \code{\link{integrate_slp}}, \code{\link{remove_slp_transitions}}
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
@@ -190,7 +186,6 @@ remove_slp_transitions <- function(slp) {
 #' @param slp A slope object
 #' @return A numeric vector of total distances
 #' @seealso \code{\link{calculate_total_distance}}, \code{\link{integrate_slp}}, \code{\link{expand_slp}}, \code{\link{remove_slp_transitions}}
-#' @export
 #' @examples
 #' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
 #' calculate_total_distance(slp)
@@ -263,39 +258,6 @@ plot.Slope <- function(slp, n = 1001, plots = c("slope", "elevation")) {
   if ("elevation" %in% plots) {
     return(g_elevation)
   }
-}
-
-#' Linearize the slope data file
-#'
-#' Converts the slope file into one WEPP run (data frame with one row)
-#'
-#' @param slp A \code{slp} object
-#' @param n (optional) a positive integer indicating how many slope columns to evaluate
-#' @seealso \code{\link{expand_slp}}
-#' @return a one-row dataframe containing total distance and slope columns
-#' @export
-#' @examples
-#' slp <- read_slp(system.file("extdata", "071000090603_2.slp", package="WEPPR"))
-#' lin_slp <- linearize_slp(slp)
-#'
-linearize_slp <- function(slp, n = 1001) {
-  remove_trail_patt <- '^(\\.\\d*?[1-9])0+$'
-
-  total_dist <- tail(calculate_total_distance(slp), n = 1)
-
-  lin_slp <- slp %>%
-    expand_slp(n = n) %>%
-    select(slope) %>%
-    mutate(ID = str_remove(round(1:n / n, digits = 4), remove_trail_patt)) %>%
-    pivot_wider(
-      names_from = ID,
-      names_prefix = "slp_slope_",
-      values_from = slope
-    )
-
-  lin_slp_dist <- cbind(total_dist, lin_slp)
-
-  return(lin_slp_dist)
 }
 
 
