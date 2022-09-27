@@ -37,4 +37,9 @@ Suggests:
 Depends:
   R (>= 4.0)
 Imports: 
-  tools
+    dplyr,
+    ggplot2,
+    ggpubr,
+    patchwork,
+    tidyr,
+    tools
