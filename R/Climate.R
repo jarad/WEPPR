@@ -168,7 +168,7 @@ plot.Climate <- function(cli, n = 1001, Date = NULL, plots = c("ppt_inst", "ppt_
   ppt_cum <- ggplot(expanded_cli, aes(x = time, y = ppt)) +
     geom_line() +
     theme_minimal() +
-    labs(x = "time (hours)", y = "ppt", title = "Precipitation")
+    labs(x = "time (hours)", y = "ppt", title = "Cumulative Precipitation")
 
 
   # both plots
