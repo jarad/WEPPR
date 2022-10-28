@@ -8,6 +8,9 @@ The [water erosion prediction project](https://www.fs.usda.gov/ccrc/tool/watersh
 
 This package should allow those who are familiar with R a more convenient interface for running a large set of WEPP runs. 
 
+For running WEPP with R, check out [DEPR](https://github.com/jarad/DEPR).
+
+Also check out [WEPPemulator](https://github.com/jarad/WEPPemulator), an R package that has functionality to construct a statistical emulator for WEPP.
 
 ## Installation
 
