@@ -18,6 +18,8 @@
 #' @export
 #'
 read_slp <- function(file) {
+  if (!require(dplyr))
+    stop("You must install the 'dplyr' package.")
 
   d <- readLines(file)
 
