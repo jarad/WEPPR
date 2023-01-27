@@ -16,6 +16,9 @@
 #'     \item{distance}{proportion (p) times total distance (m)}
 #'   }
 #' @export
+#' @examples
+#' fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
+#' slp <- read_slp(fpath_slp)
 #'
 read_slp <- function(file) {
   if (!require(dplyr))

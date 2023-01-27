@@ -26,3 +26,8 @@ The data frame class has the attributes version control number,
 Reads a Water Erosion Prediction Project (WEPP) slope (*.slp) file.
 This file contains slope information assumed to be in nondimensional distances.
 }
+\examples{
+fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
+slp <- read_slp(fpath_slp)
+
+}
