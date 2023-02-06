@@ -19,7 +19,7 @@ Plots the features in the Soil object
 }
 \examples{
 slp_sol <- merge_slp_sol(slp, sol)
-plot(slp_sol, type=c("all"))
-plot(slp_sol, type=c("salb", "kt", "kr"))
+plot(slp_sol, types=c("all"))
+plot(slp_sol, types=c("salb", "kt", "kr"))
 
 }
