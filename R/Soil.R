@@ -111,17 +111,18 @@ get_xmin <- function(layer, distance) {
   return(xmin)
 }
 
-
 #' Plots the features in the Soil object
 #'
 #' @param slp_sol a Soil object merged with Slope data
+#' @param type a list of types to include in the plot
 #' @return multiple ggplot objects which are plots of soil features
 #' @export
 #' @examples
 #' slp_sol <- merge_slp_sol(slp, sol)
-#' plot(slp_sol)
+#' plot(slp_sol, types=c("all"))
+#' plot(slp_sol, types=c("salb", "kt", "kr"))
 #'
-plot.Soil <- function(slp_sol) {
+plot.Soil <- function(slp_sol, types = c("all")) {
   if (!require(ggplot2))
     stop("You must install the 'ggplot2' package.")
 
@@ -139,16 +140,31 @@ plot.Soil <- function(slp_sol) {
     select(-solthk) %>%
     pivot_longer(c(salb:rfg), names_to = "type")
 
+  if ("all" %in% types) {
+    types = unique(slp_sol_pivot$type)
+  }
+  else {
+    v = types %in% unique(slp_sol_pivot$type)
+    if (!all(v)) {
+      bad_types = paste(types[!v])
+      stop(paste("check that",  bad_types, " is in soil types"))
+    }
+  }
+
+  # filter subset
+  slp_sol_pivot <- filter(slp_sol_pivot, type %in% types)
+
   # loop through each type and plot
   combined_plt <-
-    ggarrange(plotlist = lapply(split(slp_sol_pivot, slp_sol_pivot$type), function(x) {
+    ggarrange(plotlist = lapply(split(slp_sol_pivot, types), function(x) {
       x %>%
         group_by(layer) %>%
         mutate(y_max = cumsum(diff)) %>%
         mutate(y_min = lag(y_max, default = 0), .before = y_max) %>%
         ungroup() %>%
-        mutate(x_max = calculate_cum_dist(layer, distance)) %>%
-        mutate(x_min = get_xmin(layer, distance), .before = x_max) %>%
+        mutate(x_max = WEPPR:::calculate_cum_dist(layer, distance)) %>%
+        mutate(x_min = WEPPR:::get_xmin(layer, distance),
+               .before = x_max) %>%
         ggplot(aes(
           xmin = x_min,
           xmax = x_max,
@@ -162,6 +178,7 @@ plot.Soil <- function(slp_sol) {
 
   return(combined_plt)
 }
+
 
 
 #' Write the soil data file

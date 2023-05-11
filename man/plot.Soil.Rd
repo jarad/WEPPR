@@ -4,10 +4,12 @@
 \alias{plot.Soil}
 \title{Plots the features in the Soil object}
 \usage{
-\method{plot}{Soil}(slp_sol)
+\method{plot}{Soil}(slp_sol, types = c("all"))
 }
 \arguments{
 \item{slp_sol}{a Soil object merged with Slope data}
+
+\item{type}{a list of types to include in the plot}
 }
 \value{
 multiple ggplot objects which are plots of soil features
@@ -17,6 +19,7 @@ Plots the features in the Soil object
 }
 \examples{
 slp_sol <- merge_slp_sol(slp, sol)
-plot(slp_sol)
+plot(slp_sol, types=c("all"))
+plot(slp_sol, types=c("salb", "kt", "kr"))
 
 }
