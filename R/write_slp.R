@@ -23,7 +23,7 @@ write_slp <- function(slp, path) {
 
     nsplts = nrow(s)
     slplen = s$distance[nsplts]
-    write(paste(nsplts, format(slplen, nsmall = 6), sep = "  "), file = path, append = TRUE)
+    write(paste(nsplts, format(slplen, nsmall = 6), sep = " "), file = path, append = TRUE)
 
     line = character()
     for (i in 1:nsplts) {

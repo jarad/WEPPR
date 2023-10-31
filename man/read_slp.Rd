@@ -10,7 +10,8 @@ read_slp(file)
 \item{file}{A path to the file.}
 }
 \value{
-A \code{slp} \code{data.frame} with attributes version control number,
+A \code{Slope} object with two classes - \code{data.frame} and \code{Slope}
+The data frame class has the attributes version control number,
   aspect of the profile (degrees from North) (azm), and
   representative profile width(m) fwidth, and the
   following columns:
@@ -24,4 +25,9 @@ A \code{slp} \code{data.frame} with attributes version control number,
 \description{
 Reads a Water Erosion Prediction Project (WEPP) slope (*.slp) file.
 This file contains slope information assumed to be in nondimensional distances.
+}
+\examples{
+fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
+slp <- read_slp(fpath_slp)
+
 }

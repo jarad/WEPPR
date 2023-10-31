@@ -28,9 +28,9 @@ the amount of sand, clay and the cation exchange capacity of the soil.
 }
 \section{Functions}{
 \itemize{
-\item \code{calculate_Kb}: 
-}}
+\item \code{calculate_Kb()}: 
 
+}}
 \examples{
 calculate_baseline_effective_conductivity(5.2, 40.1, 29.4)
 }

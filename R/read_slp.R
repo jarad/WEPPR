@@ -4,7 +4,8 @@
 #' This file contains slope information assumed to be in nondimensional distances.
 #'
 #' @param file A path to the file.
-#' @return A \code{slp} \code{data.frame} with attributes version control number,
+#' @return A \code{Slope} object with two classes - \code{data.frame} and \code{Slope}
+#' The data frame class has the attributes version control number,
 #'   aspect of the profile (degrees from North) (azm), and
 #'   representative profile width(m) fwidth, and the
 #'   following columns:
@@ -15,8 +16,13 @@
 #'     \item{distance}{proportion (p) times total distance (m)}
 #'   }
 #' @export
+#' @examples
+#' fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
+#' slp <- read_slp(fpath_slp)
 #'
 read_slp <- function(file) {
+  if (!require(dplyr))
+    stop("You must install the 'dplyr' package.")
 
   d <- readLines(file)
 
@@ -49,14 +55,12 @@ read_slp <- function(file) {
   }
 
   OFEs <- do.call(rbind, OFEs)
-  if (any(OFEs$p>1))
-    stop("OFEs are not in nondimensional distances")
-
-  class(OFEs) <- append(class(OFEs), "slp")
 
   attr(OFEs, "version") <- version
   attr(OFEs, "azm")     <- azm
   attr(OFEs, "fwidth")  <- fwidth
 
-  return(OFEs)
+  slp <- new_Slope(OFEs)
+
+  return(slp)
 }

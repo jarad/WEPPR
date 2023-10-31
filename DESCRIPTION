@@ -1,6 +1,6 @@
 Package: WEPPR
 Title: R interface to the Water Erosion Prediction Project (WEPP) model
-Version: 0.0.0.9023
+Version: 0.0.0.9035
 Authors@R: 
   c(
     person(given = "Jarad",
@@ -12,7 +12,12 @@ Authors@R:
            family = "Kuttubekova",
            role = c("aut"),
            email = "gkuttube@ucsc.edu",
-           comment = c(ORCID = "0000-0003-3765-108X"))
+           comment = c(ORCID = "0000-0003-3765-108X")),
+    person(given = "Benedict",
+           family = "Neo",
+           role = c("aut"),
+           email = "benneo@iastate.edu",
+           comment = c(ORCID = "0000-0001-7520-3839"))
   )
 Description: The Water Erosion Prediction Project (WEPP) computer model
     simulates water erosion events and estimates runoff, soil detachment, and
@@ -24,12 +29,15 @@ Description: The Water Erosion Prediction Project (WEPP) computer model
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 BugReports: https://github.com/jarad/WEPPR/issues
 Suggests: 
-  testthat (>= 2.1.0),
-  reticulate (>= 1.18)
+    testthat (>= 2.1.0),
+    reticulate (>= 1.18),
+    tidyr (>= 1.3.0),
+    dplyr (>= 1.1.0),
+    ggpubr (>= 0.6.0),
+    patchwork (>= 1.1.2)
 Depends:
   R (>= 4.0)
-Imports: 
-  tools
+VignetteBuilder: knitr

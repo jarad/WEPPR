@@ -8,6 +8,9 @@ The [water erosion prediction project](https://www.fs.usda.gov/ccrc/tool/watersh
 
 This package should allow those who are familiar with R a more convenient interface for running a large set of WEPP runs. 
 
+For running WEPP with R, check out [DEPR](https://github.com/jarad/DEPR).
+
+Also check out [WEPPemulator](https://github.com/jarad/WEPPemulator), an R package that has functionality to construct a statistical emulator for WEPP.
 
 ## Installation
 
@@ -31,7 +34,6 @@ Development uses the [WEPP documentation extensively](https://www.ars.usda.gov/m
 - `read_sol()` : Soil Input File
 
 ### Reading Output files
-- `read_env()` : Events (precipitation)
 - `read_wb()` : Water balance
 - `read_yld()` : Yield
 
@@ -46,7 +48,6 @@ fpath_slp <- system.file("extdata", "071000090603_2.slp", package="WEPPR")
 fpath_man <- system.file("extdata", "071000090603_2.man", package="WEPPR")
 fpath_run <- system.file("extdata", "071000090603_2.run", package="WEPPR")
 fpath_sol <- system.file("extdata", "071000090603_2.sol", package="WEPPR")
-fpath_env <- system.file("extdata", "071000090603_2.env", package="WEPPR")
 fpath_wb <- system.file("extdata", "071000090603_2.wb", package="WEPPR")
 fpath_yld <- system.file("extdata", "071000090603_2.yld", package="WEPPR")
 
@@ -58,7 +59,6 @@ read_run(fpath_run)
 read_sol(fpath_sol)
 
 ## read output files
-read_env(fpath_env)
 read_wb(fpath_wb)
 read_yld(fpath_yld)
 ```
