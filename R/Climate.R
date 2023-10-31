@@ -33,6 +33,7 @@ new_Climate <- function(cli = list()) {
   return(structure(cli))
 }
 
+
 #' Calculates the instantaneous precipitation (precipitation / time in hours)
 #'
 #' @param cli A Climate object
@@ -43,9 +44,9 @@ new_Climate <- function(cli = list()) {
 #' cli <- read_cli(system.file("extdata", "092.63x040.90.cli", package="WEPPR"))
 #' integrate_cli(cli)
 #'
-integrate_cli <- function(cli) {
+integrate_cli <- function(cli, n = 24) {
   n <- nrow(cli)
-  t <- diff(cli$timem)
+  t <- diff(cli$timem) * (n/24) # handle different time intervals
   cli$m <- c(diff(cli$pptcum) / t, NA)
 
   return(cli)
