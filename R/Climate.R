@@ -43,9 +43,9 @@ new_Climate <- function(cli = list()) {
 #' cli <- read_cli(system.file("extdata", "092.63x040.90.cli", package="WEPPR"))
 #' integrate_cli(cli)
 #'
-integrate_cli <- function(cli) {
+integrate_cli <- function(cli, n = 24) {
   n <- nrow(cli)
-  t <- diff(cli$timem)
+  t <- diff(cli$timem) * (n / 24) # to handle different intervals
   cli$m <- c(diff(cli$pptcum) / t, NA)
 
   return(cli)
